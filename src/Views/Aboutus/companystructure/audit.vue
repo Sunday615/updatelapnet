@@ -357,6 +357,7 @@ onBeforeUnmount(() => {
   margin: 12px 0 6px;
   font-size: var(--fs-base);
   font-weight: 600;
+    padding-top: 20px;
 }
 
 .org-card-role {

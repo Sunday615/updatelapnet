@@ -37,11 +37,20 @@ import Companystructure from '../Views/Aboutus/companystructure/companystructure
 import Adminlogin from '../login/adminlogin.vue'
 import allproduct from '../Views/products/allproduct.vue'
 import atmmockup from '../components/mockup/atmmockup.vue'
+
+import mainhomepage from '../Views/Homepage/testhome.vue'
+
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomePage,
+  },
+  
+  {
+    path: '/newhome',
+    name: 'newhome',
+    component: mainhomepage,
   },
   {
     path: '/mockup',

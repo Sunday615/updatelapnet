@@ -19,8 +19,7 @@
       
 
         <div class="hero-tags">
-          <span class="tag-pill">19 ທະນາຄານສະມາຊິກທີ່ເຂົ້າຮ່ວມ</span>
-          <span class="tag-pill">2 Fintech ທີ່ເຂົ້າຮ່ວມ</span>
+         
     
        
         </div>
@@ -170,7 +169,7 @@ onMounted(() => {
 }
 
 .hero-inner {
-  max-width: 1120px;
+  max-width: 1380px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -297,7 +296,7 @@ onMounted(() => {
   border: 1px solid #e5e7eb;
   box-shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
   overflow: hidden;
-  max-width: 340px;
+  max-width: 440px;
   width: 100%;
 }
 
@@ -343,7 +342,7 @@ onMounted(() => {
 .blur-circle-1 {
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.55), transparent);
+  background: radial-gradient(circle, rgba(64, 179, 255, 0.55), transparent);
   top: -60px;
   left: -80px;
 }
@@ -351,7 +350,7 @@ onMounted(() => {
 .blur-circle-2 {
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.4), transparent);
+  background: radial-gradient(circle, rgba(1, 132, 255, 0.4), transparent);
   bottom: -80px;
   right: -40px;
 }

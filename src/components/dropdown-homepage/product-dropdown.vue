@@ -163,7 +163,7 @@ const handleLeave = () => {
 
 /* Trigger */
 .dropdown-trigger {
-  padding: 12px 20px;
+ 
   border-radius: 999px;
 
 
@@ -186,7 +186,7 @@ const handleLeave = () => {
 .dropdown-trigger span.label {
 
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: var(--fs-xs);
   font-family: "Noto Sans Lao", sans-serif;
 }
 
@@ -231,7 +231,7 @@ const handleLeave = () => {
   font-family: "Noto Sans Lao", sans-serif;
   padding: 10px 10px;
   border-radius: 12px;
-  font-size: 1.2rem;
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -241,7 +241,7 @@ const handleLeave = () => {
 }
 
 .dropdown-item span.secondary {
-  font-size: 12px;
+  font-size: 16px;
   opacity: 0.65;
 }
 

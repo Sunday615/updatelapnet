@@ -1,6 +1,6 @@
 <template>
   <div class="scrollingbar">
-    <div class="titlemember" style="padding-left: 20px; padding-right: 20px;">ທະນາຄານສະມາຊິກຂອງເຮົາ</div>
+    <div class="titlemember" style="padding-left: 20px; padding-right: 20px;"><span>ທະນາຄານສະມາຊິກຂອງເຮົາ</span></div>
 
     <div class="wrapper">
       <div class="itemLeft item1">
@@ -84,7 +84,13 @@
   margin: auto;
 
 }
-
+.titlemember span{
+  background: linear-gradient(271deg, rgba(0, 200, 255, 1) 35%, rgba(0, 0, 191, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 18px 60px rgba(0,200,255,0.14);
+}
 .titlemember {
   margin-top: 55px;
   padding-bottom: 50px;

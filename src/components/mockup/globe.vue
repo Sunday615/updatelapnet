@@ -1,12 +1,6 @@
 <template>
   <div ref="wrap" class="globeWrap">
     <canvas ref="canvas" class="globeCanvas"></canvas>
-
-    <!-- ✅ Lapnet logo at TOP -->
-  
-
-    <!-- ✅ Lapnet logo at CENTER (overlay only) -->
-  
   </div>
 </template>
 
@@ -56,15 +50,25 @@ const props = withDefaults(
 
     dotPulseSpeed?: number;
 
-    // ✅ slower & smoother
-    cycleSeconds?: number;          // inbound + outbound (total cycle)
-    microStaggerFrac?: number;      // 0..0.45
+    inboundSeconds?: number;
+    outboundSeconds?: number;
+    inboundBatchMin?: number;
+    inboundBatchMax?: number;
+    inboundStaggerSeconds?: number;
+    outboundDelaySeconds?: number;
+    outboundStaggerSeconds?: number;
+    batchPauseSeconds?: number;
+
     flowTrailCount?: number;
     flowTrailSpacing?: number;
     activeLineOpacity?: number;
     baseLineOpacity?: number;
 
     nodePinScale?: number;
+    hubPinScale?: number;
+
+    // ✅ NEW: show star background in THREE scene or not
+    showStars?: boolean;
   }>(),
   {
     pairs: () => [],
@@ -86,15 +90,24 @@ const props = withDefaults(
 
     dotPulseSpeed: 0.60,
 
-    // ✅ default slower
-    cycleSeconds: 12.0,
-    microStaggerFrac: 0.24,
+    inboundSeconds: 3.8,
+    outboundSeconds: 3.2,
+    inboundBatchMin: 3,
+    inboundBatchMax: 4,
+    inboundStaggerSeconds: 0.18,
+    outboundDelaySeconds: 0.10,
+    outboundStaggerSeconds: 0.10,
+    batchPauseSeconds: 0.35,
+
     flowTrailCount: 7,
     flowTrailSpacing: 0.06,
     activeLineOpacity: 0.9,
     baseLineOpacity: 0.28,
 
     nodePinScale: 0.14,
+    hubPinScale: 0.29,
+
+    showStars: false, // ✅ default: no stars (clean overlay)
   }
 );
 
@@ -147,12 +160,10 @@ function smoothstep(edge0: number, edge1: number, x: number) {
   const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
   return t * t * (3 - 2 * t);
 }
-// ✅ more premium easing than smoothstep for progress
 function easeInOutCubic(x: number) {
   const t = clamp(x, 0, 1);
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
-
 function angleBetween(a: THREE.Vector3, b: THREE.Vector3) {
   const d = clamp(a.clone().normalize().dot(b.clone().normalize()), -1, 1);
   return Math.acos(d);
@@ -220,51 +231,6 @@ async function loadLandMaskSampler(url: string) {
   } catch {
     return null;
   }
-}
-
-function computeBatchSizes(total: number): number[] {
-  if (total <= 4) return [total];
-
-  const g4 = Math.floor(total / 4);
-  const r = total % 4;
-
-  if (r === 0) return Array(g4).fill(4);
-  if (r === 1) return g4 >= 1 ? [...Array(g4 - 1).fill(4), 3, 3] : [3, 3];
-  if (r === 2) return g4 >= 2 ? [...Array(g4 - 2).fill(4), 3, 3, 4] : [3, 3];
-  return [...Array(g4).fill(4), 3];
-}
-
-function buildBatchPlan(totalRoutes: number) {
-  const sizes = computeBatchSizes(totalRoutes);
-  const batchCount = sizes.length;
-
-  const batchIndexArr = new Array<number>(totalRoutes).fill(0);
-  const inBatchIndexArr = new Array<number>(totalRoutes).fill(0);
-  const batchSizeArr = new Array<number>(totalRoutes).fill(1);
-
-  let cursor = 0;
-  for (let b = 0; b < batchCount; b++) {
-    const s = sizes[b]!;
-    for (let k = 0; k < s; k++) {
-      if (cursor >= totalRoutes) break;
-      batchIndexArr[cursor] = b;
-      inBatchIndexArr[cursor] = k;
-      batchSizeArr[cursor] = s;
-      cursor++;
-    }
-  }
-
-  const startFracByBatch: number[] = [];
-  const windowFracByBatch: number[] = [];
-  let before = 0;
-  for (let b = 0; b < batchCount; b++) {
-    const s = sizes[b]!;
-    startFracByBatch[b] = before / totalRoutes;
-    windowFracByBatch[b] = s / totalRoutes;
-    before += s;
-  }
-
-  return { sizes, batchCount, batchIndexArr, inBatchIndexArr, batchSizeArr, startFracByBatch, windowFracByBatch };
 }
 
 function pickSpreadPoints(count: number, candidates: THREE.Vector3[], minAngleRad: number) {
@@ -364,7 +330,7 @@ function makeDotGlobe(points: THREE.Vector3[]) {
     blending: THREE.NormalBlending,
     uniforms: {
       uTime: { value: 0 },
-      uPulseSpeed: { value: props.dotPulseSpeed }, // ใช้คุมจังหวะรวม
+      uPulseSpeed: { value: props.dotPulseSpeed },
       uColor: { value: new THREE.Color(CFG.dotColor) },
       uSize: { value: 18.0 },
     },
@@ -378,33 +344,24 @@ function makeDotGlobe(points: THREE.Vector3[]) {
 
       varying float vAlpha;
 
-      float saturate(float x) { return clamp(x, 0.0, 1.0); }
-
       void main() {
         vec3 p = position;
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
 
-        // forward-facing fade (hide back dots)
         vec3 n = normalize((modelMatrix * vec4(p, 0.0)).xyz);
         vec3 v = normalize(cameraPosition - (modelMatrix * vec4(p, 1.0)).xyz);
         float fwd = dot(n, v);
         float frontFade = smoothstep(-0.15, 0.55, fwd);
 
-     
         float basePulse = 0.72 + 0.28 * sin(uTime * uPulseSpeed + aSeed * 6.2831);
 
-      
-        float twFreq = 0.65 + 2.75 * fract(aSeed * 17.0);        // per-point frequency
-        float tw = 0.5 + 0.5 * sin(uTime * twFreq + aSeed * 19.7); // 0..1
+        float twFreq = 0.65 + 2.75 * fract(aSeed * 17.0);
+        float tw = 0.5 + 0.5 * sin(uTime * twFreq + aSeed * 19.7);
+        float spark = smoothstep(0.92, 1.0, tw);
 
-       
-        float spark = smoothstep(0.92, 1.0, tw); // rare highlight 0..1
-
-      
         float twinkleGain = (0.78 + 0.22 * tw) + (0.45 * spark);
         vAlpha = basePulse * twinkleGain * frontFade;
 
-   
         float sizeBoost = 0.92 + 0.10 * tw + 0.12 * spark;
         float size = uSize * aScale * sizeBoost * (1.0 / max(0.001, -mv.z));
 
@@ -419,13 +376,8 @@ function makeDotGlobe(points: THREE.Vector3[]) {
       void main() {
         vec2 uv = gl_PointCoord - 0.5;
         float d = length(uv);
-
-        // circle with soft edge (ยังไม่ใช่ glow)
         float circle = smoothstep(0.5, 0.18, d);
-
-        // center micro-contrast (ทำให้ดูเป็น “spark” แบบคมๆ)
-        float core = smoothstep(0.18, 0.0, d); // stronger in center
-
+        float core = smoothstep(0.18, 0.0, d);
         float a = circle * vAlpha * (0.90 + 0.10 * core);
         gl_FragColor = vec4(uColor, a);
       }
@@ -441,7 +393,6 @@ function makeDotGlobe(points: THREE.Vector3[]) {
 
   return { pts, mat };
 }
-
 
 function makeStarfield(count = 1200, radius = 18) {
   const g = new THREE.BufferGeometry();
@@ -476,7 +427,7 @@ function makeStarfield(count = 1200, radius = 18) {
   return s;
 }
 
-function makeLogoPin(worldPos: THREE.Vector3, normal: THREE.Vector3, logoTex: THREE.Texture | undefined, size = 0.20) {
+function makeLogoPin(worldPos: THREE.Vector3, normal: THREE.Vector3, logoTex: THREE.Texture | undefined, size = 0.2) {
   const group = new THREE.Group();
   if (logoTex) {
     const mat = new THREE.SpriteMaterial({
@@ -505,14 +456,14 @@ function makeHubMarker(worldPos: THREE.Vector3, normal: THREE.Vector3, circleTex
     map: circleTex,
     color: new THREE.Color("#ffffff"),
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.95,
     blending: THREE.NormalBlending,
     depthWrite: false,
     alphaTest: 0.15,
   });
 
   const spr = new THREE.Sprite(mat);
-  spr.scale.set(0.11, 0.11, 1);
+  spr.scale.set(0.10, 0.10, 1);
   spr.position.copy(normal.clone().multiplyScalar(0.06));
 
   const group = new THREE.Group();
@@ -622,13 +573,8 @@ function makeHubRoute(hubPos: THREE.Vector3, nodePos: THREE.Vector3, circleTex: 
       const decay = 1 - i / dots.length;
       d.mat.opacity = (i === 0 ? 0.95 : 0.55 * decay) * fade;
 
-      if (i === 0) {
-        const s = d.base * (1 + 0.08 * Math.sin(u * 12.0));
-        d.spr.scale.set(s, s, 1);
-      } else {
-        const s = d.base * (0.95 + 0.12 * decay);
-        d.spr.scale.set(s, s, 1);
-      }
+      const s = i === 0 ? d.base * (1 + 0.08 * Math.sin(u * 12.0)) : d.base * (0.95 + 0.12 * decay);
+      d.spr.scale.set(s, s, 1);
     }
   };
 
@@ -677,6 +623,19 @@ function makeHubRoute(hubPos: THREE.Vector3, nodePos: THREE.Vector3, circleTex: 
   return { baseLine, outLine, inLine, outDots: outTrail.group, inDots: inTrail.group, update };
 }
 
+// scheduler types
+type RouteMode = "in" | "out";
+type RouteState = { mode: RouteMode | null; start: number; dur: number };
+type RouteEvent = { route: number; mode: RouteMode; start: number; dur: number };
+
+function shuffle<T>(arr: T[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j]!, arr[i]!];
+  }
+  return arr;
+}
+
 onMounted(async () => {
   if (!canvas.value || !wrap.value) return;
 
@@ -691,6 +650,8 @@ onMounted(async () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NoToneMapping;
+
+  // ✅ transparent clear
   renderer.setClearColor(0x000000, 0);
 
   scene = new THREE.Scene();
@@ -703,7 +664,8 @@ onMounted(async () => {
   key.position.set(3, 2, 3);
   scene.add(key);
 
-  scene.add(makeStarfield());
+  // ✅ optional starfield background
+  if (props.showStars) scene.add(makeStarfield());
 
   const globe = new THREE.Group();
   scene.add(globe);
@@ -735,12 +697,9 @@ onMounted(async () => {
   disposers.push(() => circleTex.dispose());
 
   const loader = new THREE.TextureLoader();
-const urls = Array.from(
-  new Set([hub.value.logo, ...nodes.value.map((n) => n.logo)].filter(Boolean))
-);
-
-
+  const urls = Array.from(new Set([hub.value.logo, ...nodes.value.map((n) => n.logo)].filter(Boolean)));
   const texMap = new Map<string, THREE.Texture>();
+
   await Promise.all(
     urls.map(async (url) => {
       try {
@@ -757,16 +716,11 @@ const urls = Array.from(
 
   const routesGroup = new THREE.Group();
   globe.add(routesGroup);
- const hubTex = texMap.get(hub.value.logo);
 
-// ✅ ถ้าโหลดโลโก้ได้ -> ใช้โลโก้ Lapnet แทนจุดสีขาว
-if (hubTex) {
-  routesGroup.add(makeLogoPin(hubVec, hubN, hubTex, 0.29)); // ปรับขนาดได้
-} else {
-  // ✅ fallback (ถ้าโลโก้ไม่โหลด) -> ใช้จุดสีขาวเหมือนเดิม
-  routesGroup.add(makeHubMarker(hubVec, hubN, circleTex));
-}
-
+  // ✅ hub logo on globe (fallback to white dot)
+  const hubTex = texMap.get(hub.value.logo);
+  if (hubTex) routesGroup.add(makeLogoPin(hubVec, hubN, hubTex, props.hubPinScale ?? 0.29));
+  else routesGroup.add(makeHubMarker(hubVec, hubN, circleTex));
 
   const minSepRad = (props.minSeparationDeg! * Math.PI) / 180;
   const minHubRad = (props.minNodeToHubDeg! * Math.PI) / 180;
@@ -777,10 +731,8 @@ if (hubTex) {
     ? pickSpreadPoints(need, safeCandidates.length ? safeCandidates : dotPoints, minSepRad)
     : [];
 
-  const totalRoutes = nodes.value.length;
-  const plan = buildBatchPlan(totalRoutes);
-
-  const routeUpdaters: Array<(t: number) => void> = [];
+  const routes: Array<ReturnType<typeof makeHubRoute>> = [];
+  const routeStates: RouteState[] = Array.from({ length: nodes.value.length }, () => ({ mode: null, start: 0, dur: 0 }));
 
   for (let i = 0; i < nodes.value.length; i++) {
     const node = nodes.value[i]!;
@@ -794,39 +746,99 @@ if (hubTex) {
     routesGroup.add(makeLogoPin(nodePos, nodeN, texMap.get(node.logo), props.nodePinScale!));
 
     const route = makeHubRoute(hubVec, nodePos, circleTex, color);
-    routesGroup.add(route.baseLine);
-    routesGroup.add(route.outLine);
-    routesGroup.add(route.inLine);
-    routesGroup.add(route.outDots);
-    routesGroup.add(route.inDots);
-
-    const b = plan.batchIndexArr[i] ?? 0;
-    const k = plan.inBatchIndexArr[i] ?? 0;
-    const s = plan.batchSizeArr[i] ?? 1;
-
-    routeUpdaters.push((t) => {
-      const cyc = props.cycleSeconds!;
-      const half = cyc / 2;
-      const local = t % cyc;
-
-      const phaseIn = local < half;
-      const phaseT = phaseIn ? local : (local - half);
-
-      const start = (plan.startFracByBatch[b] ?? 0) * half;
-      const window = (plan.windowFracByBatch[b] ?? (1 / plan.batchCount)) * half;
-
-      const frac = clamp(props.microStaggerFrac ?? 0.24, 0, 0.45);
-      const microMax = window * frac;
-      const micro = s <= 1 ? 0 : (k / Math.max(1, s - 1)) * microMax;
-
-      const denom = Math.max(0.0001, window - microMax);
-
-      const uRaw = (phaseT - start - micro) / denom;
-      const u = (uRaw <= 0 || uRaw >= 1) ? 0 : easeInOutCubic(uRaw); // ✅ smoother
-
-      route.update(t, phaseIn, u);
-    });
+    routesGroup.add(route.baseLine, route.outLine, route.inLine, route.outDots, route.inDots);
+    routes.push(route);
   }
+
+  // scheduler
+  let events: RouteEvent[] = [];
+  let order: number[] = shuffle([...Array(nodes.value.length).keys()]);
+  let orderCursor = 0;
+
+  const pickNextSource = (exclude: Set<number>) => {
+    for (let tries = 0; tries < nodes.value.length * 2; tries++) {
+      if (orderCursor >= order.length) {
+        order = shuffle([...Array(nodes.value.length).keys()]);
+        orderCursor = 0;
+      }
+      const idx = order[orderCursor++]!;
+      if (!exclude.has(idx)) return idx;
+    }
+    return null;
+  };
+
+  const pickDest = (exclude: Set<number>, usedDests: Set<number>) => {
+    const n = nodes.value.length;
+    if (n <= 1) return null;
+    for (let t = 0; t < 40; t++) {
+      const d = Math.floor(Math.random() * n);
+      if (exclude.has(d) || usedDests.has(d)) continue;
+      if (routeStates[d]?.mode) continue;
+      return d;
+    }
+    for (let t = 0; t < 40; t++) {
+      const d = Math.floor(Math.random() * n);
+      if (!exclude.has(d) && !usedDests.has(d)) return d;
+    }
+    return null;
+  };
+
+  const scheduleBatch = (batchStart: number) => {
+    const total = nodes.value.length;
+    if (total === 0) return batchStart + 2;
+
+    const minB = clamp(props.inboundBatchMin ?? 3, 1, total);
+    const maxB = clamp(props.inboundBatchMax ?? 4, minB, total);
+    const batchSize = total <= maxB ? total : (Math.random() < 0.55 ? minB : maxB);
+
+    const inDur = Math.max(1.6, props.inboundSeconds ?? 3.8);
+    const outDur = Math.max(1.4, props.outboundSeconds ?? inDur * 0.85);
+    const inSt = clamp(props.inboundStaggerSeconds ?? 0.18, 0.0, 0.6);
+    const outDelay = clamp(props.outboundDelaySeconds ?? 0.10, 0.0, 0.8);
+    const outSt = clamp(props.outboundStaggerSeconds ?? 0.10, 0.0, 0.6);
+    const pause = clamp(props.batchPauseSeconds ?? 0.35, 0.0, 2.0);
+
+    const sources: number[] = [];
+    const excludeSources = new Set<number>();
+
+    for (let i = 0; i < batchSize; i++) {
+      const s = pickNextSource(excludeSources);
+      if (s == null) break;
+      sources.push(s);
+      excludeSources.add(s);
+    }
+
+    const usedDests = new Set<number>();
+
+    for (let i = 0; i < sources.length; i++) {
+      const src = sources[i]!;
+      const startIn = batchStart + i * inSt;
+      events.push({ route: src, mode: "in", start: startIn, dur: inDur });
+
+      const exclude = new Set<number>(excludeSources);
+      exclude.add(src);
+
+      const dest = pickDest(exclude, usedDests);
+      if (dest != null) {
+        usedDests.add(dest);
+        const startOut = startIn + inDur + outDelay + i * outSt;
+        events.push({ route: dest, mode: "out", start: startOut, dur: outDur });
+      }
+    }
+
+    const lastInEnd = batchStart + (sources.length - 1) * inSt + inDur;
+    const lastOutStart = batchStart + (sources.length - 1) * inSt + inDur + outDelay + (sources.length - 1) * outSt;
+    const lastOutEnd = lastOutStart + outDur;
+
+    return Math.max(lastInEnd, lastOutEnd) + pause;
+  };
+
+  let nextBatchAt = reduce ? 0.2 : 0.9;
+  const ensureSchedule = (t: number) => {
+    const lookAhead = 16;
+    while (nextBatchAt < t + lookAhead) nextBatchAt = scheduleBatch(nextBatchAt);
+    events.sort((a, b) => a.start - b.start);
+  };
 
   const resize = () => {
     if (!renderer || !camera || !wrap.value) return;
@@ -897,10 +909,36 @@ if (hubTex) {
 
     const t = clock.getElapsedTime();
 
-    if ((dotMat as any)?.uniforms?.uTime) (dotMat as any).uniforms.uTime.value = t;
-    if ((dotMat as any)?.uniforms?.uPulseSpeed) (dotMat as any).uniforms.uPulseSpeed.value = props.dotPulseSpeed!;
+    (dotMat as any).uniforms.uTime.value = t;
+    (dotMat as any).uniforms.uPulseSpeed.value = props.dotPulseSpeed!;
 
-    for (const u of routeUpdaters) u(t);
+    ensureSchedule(t);
+
+    while (events.length && events[0]!.start <= t) {
+      const ev = events.shift()!;
+      const st = routeStates[ev.route];
+      if (st && st.mode && t < st.start + st.dur) continue;
+      routeStates[ev.route] = { mode: ev.mode, start: ev.start, dur: ev.dur };
+    }
+
+    for (let i = 0; i < routes.length; i++) {
+      const st = routeStates[i]!;
+      let phaseIn = true;
+      let u = 0;
+
+      if (st.mode) {
+        const raw = (t - st.start) / Math.max(0.0001, st.dur);
+        if (raw >= 1) {
+          st.mode = null;
+          u = 0;
+          phaseIn = true;
+        } else {
+          phaseIn = st.mode === "in";
+          u = easeInOutCubic(clamp(raw, 0, 1));
+        }
+      }
+      routes[i]!.update(t, phaseIn, u);
+    }
 
     const baseSpin = reduce ? 0.03 : 0.07;
     globe.rotation.y += 0.002 * baseSpin;
@@ -933,58 +971,19 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.globeWrap {
-  width: min(1240px, 96vw);
-  aspect-ratio: 16 / 9;
-  max-height: 680px;
-  margin: 0 auto;
+/* ✅ IMPORTANT: wrapper โปร่งใส 100% ให้ parent คุมขนาดเอง */
+.globeWrap{
+  width: 100%;
+  height: 100%;
   position: relative;
-  border-radius: 30px;
-
-  background:
-    radial-gradient(980px 580px at 50% 35%, rgba(124, 58, 237, 0.10), transparent 60%),
-    radial-gradient(760px 520px at 50% 20%, rgba(34, 211, 238, 0.05), transparent 62%),
-    linear-gradient(180deg, rgba(5, 2, 13, 1), rgba(4, 1, 10, 1));
-  overflow: hidden;
-
-  box-shadow:
-    0 28px 80px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+  background: transparent;
+  border-radius: inherit; /* ถ้า parent มี radius จะเข้ากัน */
+  overflow: hidden;       /* กันขอบแตก */
 }
 
-.globeCanvas { width: 100%; height: 100%; display: block; }
-
-/* top */
-.hubTop{
-  position:absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(10, 6, 20, 0.55);
-  border: 1px solid rgba(255,255,255,0.10);
-  backdrop-filter: blur(10px);
-  pointer-events:none;
+.globeCanvas{
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.hubTopLogo{
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  object-fit: contain;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.10);
-  padding: 6px;
-}
-.hubTopText{
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.88);
-}
-
-/* ✅ center */
-
 </style>

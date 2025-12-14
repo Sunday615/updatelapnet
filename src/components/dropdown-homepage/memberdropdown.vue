@@ -132,7 +132,7 @@ const handleLeave = () => {
 
 /* Trigger */
 .dropdown-trigger {
-  padding: 12px 20px;
+
   border-radius: 999px;
 
 
@@ -155,7 +155,7 @@ const handleLeave = () => {
 .dropdown-trigger span.label {
   text-transform: uppercase;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: var(--fs-xs);
   font-family: "Noto Sans Lao", sans-serif;
 }
 
@@ -200,7 +200,7 @@ const handleLeave = () => {
   padding: 10px 10px;
   border-radius: 12px;
   font-family: "Noto Sans Lao", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
