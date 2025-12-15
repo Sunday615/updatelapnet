@@ -1,12 +1,13 @@
 <script setup>
 import navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
-import homepagebutton from '../../components/button/homepagebutton.vue';
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue'
+
+
+
 import tagproduct from '../../components/tagproduct/tagproduct.vue';
 import product1_footerlogomember from '../../components/footer/logomemberfooter/product1_footerlogomember.vue';
 import hero_sectionproduct1 from './product_herosection/hero_sectionproduct1.vue';
 import secondfooter from '../../components/footer/mainfooter/secondfooter.vue';
+import cardbenetfitpd1 from '../../Views/products/benetfit/cardbenetfitpd1.vue'
 import { onMounted } from 'vue';
 onMounted(() => {
   window.scrollTo({
@@ -106,23 +107,7 @@ const memberLogos = [
       <hero_sectionproduct1/>
   </div>
      <div class="benetfix">
-       <videobackgroundhomepage :src="heroVideo" poster="/images/tech-poster.jpg">
-           <div class="benetfitcontainer">
-               <div class="benetfitcontent">
-                  <h1>ຜົນປະໂຫຍດທີ່ໄດ້ຮັບ</h1>
-                  <p>ປະຢັດ​ເວລາ, ສະດວກ ໂດຍລູກຄ້າບໍ່ຕ້ອງລໍຖ້າການໃຊ້ບໍລິການ ຫຼື ຊອກຫາຕູ້​ເອທີ​ເອັມຂອງທະນາຄານຜູ້ອອກບັດ
-                    ກໍ່ສາມາດ
-                    ກວດຍອດເງິນຜ່ານຕູ້​ເອທີ​ເອັມຂອງບັນດາທະນາຄານທຸກລະກິດທີ່ເຊື່ອມຕໍ່ກັບລະບົບແລັບ.</p>
-               </div>
-               <div class="condition">
-                        <h1>ເງື່ອນໄຂການໃຊ້ບໍລິການ</h1>
-                  <p>ລູກຄ້າ​ທີ່ມີ​ບັດ​ເອທີເອັມຂອງ​ທະນາຄານ​ທີ່​ເປັນ​ສະມາຊິກ​ຂອງ ແລັບເນັດ, ໂດຍສາມາດສັງເກດໄດ້ຈາກ
-                    ສັນຍາ​ລັກແລັບເນັດທີ່
-                    ຕິດຕາມຕູ້ເອທີເອັມ
-                    ກໍສາມາດໃຊ້ຮ່ວມກັນໄດ້. ເຊິ່ງການກວດຍອດເງິນຂ້າມຕູ້ເອທີເອັມນີ້ແມ່ນບໍ່ເສຍຄ່າທຳນຽມໃດໆທັງນັ້ນ.</p>
-               </div>
-           </div>
-      </videobackgroundhomepage>
+      <cardbenetfitpd1/>
      </div>
 <div class="footermemberproduct1">
 
@@ -208,7 +193,7 @@ const memberLogos = [
 }
 .benetfix{
    width: 100%;
-   height: 80vh;
+   height: auto;
 
 }
 .atmmockup img{

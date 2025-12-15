@@ -3,7 +3,6 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { gsap } from 'gsap';
 
 import main_navbar from '../../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue';
 import membercard from '../../../components/membercard/membercard.vue';
 import footermembercrossborder from '../../../components/footer/logomemberfooter/logofootermembercrossborder.vue';
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue';

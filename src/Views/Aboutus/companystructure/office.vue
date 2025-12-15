@@ -85,7 +85,6 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { gsap } from 'gsap'
 import main_navbar from '../../../components/miannavbar/main_navbar.vue'
-import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue'
 import cpn_navbar from './navbarcompany/cpn_navbar.vue'
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue'
 const root = ref(null)

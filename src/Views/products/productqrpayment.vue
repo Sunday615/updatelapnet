@@ -1,8 +1,7 @@
 <script setup>
-import navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
-import homepagebutton from '../../components/button/homepagebutton.vue';
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue'
+
+import main_navbar from '../../components/miannavbar/main_navbar.vue';
+
 import tagproduct from '../../components/tagproduct/tagproduct.vue';
 import product5_footerlogomember from '../../components/footer/logomemberfooter/product5_footerlogomember.vue';
 import product5tech from '../techbenetfit/product5tech.vue';
@@ -104,7 +103,7 @@ const memberLogos = [
 </script>
 
 <template>
-  <navbar
+  <main_navbar
     title="ຜະລິດຕະພັນ ແລະ ການບໍລິການ"
     :breadcrumb="[
       'ໜ້າຫຼັກ',

@@ -223,7 +223,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import gsap from 'gsap';
 import main_navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
 import secondfooter from '../../components/footer/mainfooter/secondfooter.vue';
 const swiperModules = [Autoplay, Pagination];
 

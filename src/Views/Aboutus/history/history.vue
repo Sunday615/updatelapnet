@@ -1,9 +1,8 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+
 import main_navbar from "../../../components/miannavbar/main_navbar.vue";
-import mainfooter from "../../../components/footer/mainfooter/mainfooter.vue";
 import secondfooter from "../../../components/footer/mainfooter/secondfooter.vue";
 import piechart from "../piechart/piechart.vue";
 import timeline from "../piechart/timeline.vue";

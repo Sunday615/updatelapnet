@@ -1,8 +1,7 @@
 <script setup>
 import navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
-import homepagebutton from '../../components/button/homepagebutton.vue';
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue'
+
+import cardbenetfitpd2 from '../../Views/products/benetfit/cardbenetfitpd2.vue'
 import tagproduct from '../../components/tagproduct/tagproduct.vue';
 import product1_footerlogomember from '../../components/footer/logomemberfooter/product1_footerlogomember.vue';
 import cardscrolling from './cardscrolling/cardscrolling.vue';
@@ -101,26 +100,7 @@ const memberLogos = [
       <hero_sectionproduct2/>
    </div>
    <div class="benetfix">
-      <videobackgroundhomepage :src="heroVideo" poster="/images/tech-poster.jpg">
-         <div class="benetfitcontainer">
-            <div class="benetfitcontent">
-               <h1>ຜົນປະໂຫຍດທີ່ໄດ້ຮັບ</h1>
-               <h2>ດ້ານທະນາຄານສະມາຊິກ</h2>
-               <p>ປະຢັດຄ່າໃຊ້ຈ່າຍໃນການລົງທຶນເຊັ່ນ: ຫຼດຜ່ອນຄ່າໃຊ້ຈ່າຍໃນການຂະຫຍາຍຕູ້ ATM ແລະ ຄ່າບຳລຸງຮັກສາທີ່ຕິດພັນກັບການ
-                  ຂະຫຍາຍຕູ້ ATM; ເພີ່ມຈຸດບໍລິການຕູ້ ATM ແກ່ລູກຄ້າຂອງທະນາຄານທີ່ເຂົ້າເປັນສະມາຊິກ
-                  ຊຶ່ງສາມາດບໍລິການລູກຄ້າໄດ້ທົ່ວປະເທດ
-                  ດ້ວຍຄ່າໃຊ້ຈ່າຍໃນການລົງທຶນຕໍ່າ.</p>
-            </div>
-            <div class="condition">
-               <h1>ເງື່ອນໄຂການໃຊ້ບໍລິການ</h1>
-               <h2>ດ້ານລູກຄ້າຂອງທະນາຄານ</h2>
-               <p>ລູກຄ້າສາມາດນໍາໃຊ້ຕູ້ ATM ຂອງທຸກທະນາຄານທີ່ເປັນສະມາຊິກ ຂອງລະບົບ LAPS ຊຶ່ງປັດຈຸບັນມີທະນາຄານສະມາຊິກທັງໝົດ
-                  16 ທະນາຄານ ເປັນການອຳນວຍຄວາມສະດວກ ແລະ ປະຢັດເວລາ ໂດຍລູກຄ້າບໍ່ຈໍາເປັນຕ້ອງລໍຖ້າການໃຊ້ບໍລິການ ຫຼື
-                  ຊອກຫາຕູ້ເອທີເອັມ
-                  ຂອງທະນາຄານຜູ້ອອກບັດເທົ່ານັ້ນ.</p>
-            </div>
-         </div>
-      </videobackgroundhomepage>
+     <cardbenetfitpd2/>
    </div>
    <div class="cardscrolling">
 
@@ -249,7 +229,8 @@ const memberLogos = [
 
 .benetfix {
    width: 100%;
-   height: 80vh;
+   height: auto;
+  
 
 }
 

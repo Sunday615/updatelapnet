@@ -121,7 +121,6 @@
 <script setup>
 import { onMounted, onBeforeUnmount, nextTick, computed } from "vue";
 import { gsap } from "gsap";
-import mainfooter from "../../../components/footer/mainfooter/mainfooter.vue";
 import main_navbar from "../../../components/miannavbar/main_navbar.vue";
 import bod_navbar from "../companystructure/navbarcompany/bod_navbar.vue";
 import secondfooter from "../../../components/footer/mainfooter/secondfooter.vue";

@@ -162,13 +162,13 @@
 
 <script>
 import { gsap } from "gsap";
-import mainfooter from "../../../components/footer/mainfooter/mainfooter.vue";
+import secondfooter from "../../../components/footer/mainfooter/secondfooter.vue";
 
 export default {
   name: "BlogGrid",
 
   components: {
-    mainfooter
+    secondfooter
   },
 
   data() {

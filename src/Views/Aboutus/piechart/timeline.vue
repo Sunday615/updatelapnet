@@ -1,56 +1,70 @@
 <template>
   <div class="page">
     <div class="wrap">
-    <header class="hero">
-      <div>
-        <div class="kicker">Roadmap</div>
-        <h1>ຄວາມເປັນມາຂອງ Lao National Payment Network</h1>
-        <p class="sub " style="display:flex ; align-items: center; ">
-            <img src="/logolapnet/fullcircle.png" alt="" style="width: 30px; height:30px ; margin-right: 7px;">
+      <header class="hero">
+        <div>
+          <div class="kicker">Roadmap</div>
+          <h1>ຄວາມເປັນມາຂອງ Lao National Payment Network</h1>
+          <p class="sub" style="display:flex; align-items:center;">
+            <img
+              src="/logolapnet/fullcircle.png"
+              alt=""
+              style="width: 30px; height:30px; margin-right: 7px;"
+            />
             Lao Nationnal Payment Network
-        </p>
-      </div>
-     
-    </header>
+          </p>
+        </div>
+      </header>
 
-    <section class="timeline" ref="timelineRef">
-      <!-- Real line element so GSAP can animate it reliably -->
-      <div class="line" aria-hidden="true">
-        <div class="lineFill" ref="lineFillRef" />
-      </div>
+      <section class="timeline" ref="timelineRef">
+        <div class="line" aria-hidden="true">
+          <div class="lineFill" ref="lineFillRef" />
+        </div>
 
-      <article
-        v-for="(item, i) in items"
-        :key="item.id"
-        class="event"
-        :data-side="item.side"
-        :ref="(el) => setEventRef(el, i)"
-      >
-        <!-- Left side -->
-        <div class="side left" :class="{ reveal: item.side === 'left' }">
-          <div v-if="item.side === 'left'" class="card">
-            <div class="date">{{ item.date }}</div>
-            <h3 class="title">{{ item.title }}</h3>
-            <p class="desc">{{ item.desc }}</p>
+        <article
+          v-for="(item, i) in items"
+          :key="item.id"
+          class="event"
+          :data-side="item.side"
+          :ref="(el) => setEventRef(el, i)"
+        >
+          <!-- Left side -->
+          <div class="side left" :class="{ reveal: item.side === 'left' }">
+            <div v-if="item.side === 'left'" class="card">
+              <div class="date">{{ item.date }}</div>
+
+              <!-- ✅ Icon added to ALL titles -->
+              <h3 class="title">
+                <i class="fa-solid" :class="item.icon" aria-hidden="true"></i>
+                <span>{{ item.title }}</span>
+              </h3>
+
+              <p class="desc">{{ item.desc }}</p>
+            </div>
           </div>
-        </div>
 
-        <!-- Middle -->
-        <div class="mid">
-          <span class="connector" />
-          <span class="node" aria-hidden="true" />
-        </div>
-
-        <!-- Right side -->
-        <div class="side right" :class="{ reveal: item.side === 'right' }">
-          <div v-if="item.side === 'right'" class="card">
-            <div class="date">{{ item.date }}</div>
-            <h3 class="title">{{ item.title }}</h3>
-            <p class="desc">{{ item.desc }}</p>
+          <!-- Middle -->
+          <div class="mid">
+            <span class="connector" />
+            <span class="node" aria-hidden="true" />
           </div>
-        </div>
-      </article>
-    </section>
+
+          <!-- Right side -->
+          <div class="side right" :class="{ reveal: item.side === 'right' }">
+            <div v-if="item.side === 'right'" class="card">
+              <div class="date">{{ item.date }}</div>
+
+              <!-- ✅ Icon added to ALL titles -->
+              <h3 class="title">
+                <i class="fa-solid" :class="item.icon" aria-hidden="true"></i>
+                <span>{{ item.title }}</span>
+              </h3>
+
+              <p class="desc">{{ item.desc }}</p>
+            </div>
+          </div>
+        </article>
+      </section>
     </div>
   </div>
 </template>
@@ -66,38 +80,46 @@ const items = ref([
   {
     id: "p1",
     side: "left",
+    icon: "fa-solid fa-landmark",
     date: "Phase 01 • ",
     title: "ເລີ່ມກໍຕັ້ງບໍລິສັດ",
     desc: "ບໍລິສັດ ລາວເນເຊີນນໍ ເພເມັ້ນ ເນັດເວີກ ຈຳກັດ ຫືຼ LAPNet ດຳເນີນທຸລະກິດໃນຮູບແບບ ບໍລິສັດ ຈຳກັດ,  ເຊິ່ງໄດ້ຮັບອະນຸຍາດເປັນຜູ້ຄວບຄຸມລະບົບບັດທະນາຄານຮ່ວມກັນ ຫຼື Lao ATM Pool Switching (LAPS) ໂດຍແມ່ນໂຄງການຊ່ວຍເຫຼືອລະຫວ່າງລັດຖະບານ ສປ ຈີນ ຕໍ່ກັບ ສປປ ລາວ ຕາມສານແລກປ່ຽນວ່າດ້ວຍລັດຖະບານ ສປ ຈີນ ເຫັນດີຊ່ວຍເຫຼືອລັດຖະບານ ສປປ ລາວ ປະຕິບັດ ‘’ໂຄງການລະບົບຊຳລະດ້ວຍບັດອັດຕະໂນມັດຂອງທະນາຄານ’’.",
   },
+
   {
     id: "p2",
     side: "right",
+    icon: "fa-circle-play",
     date: "Phase 02 • ",
     title: "ເປີດນຳໃຊ້ລະບົບຢ່າງເປັນທາງການ",
     desc: "ໂຄງການດັ່ງກ່າວໄດ້ສຳເລັດ ແລະ ເປີດນຳໃຊ້ລະບົບຢ່າງເປັນທາງການໃນວັນທີ 01/12/2015 ໂດຍຢູ່ພາຍໃຕ້ການບໍລິຫານຂອງ ທຫລ, ເຊິ່ງຂັ້ນເທິງ  ໄດ້ເຫັນດີມອບໝາຍໃຫ້ກົມເຕັກໂນໂລຊີຂໍ້ມູນຂ່າວສານເປັນຜູ້ຈັດຕັ້ງປະຕິບັດ ແລະ ໄດ້ສ້າງຕັ້ງພະແນກຄຸ້ມຄອງບັດທະນາຄານຂຶ້ນມາເພື່ອຄຸ້ມຄອງ ແລະ ເຮັດວຽກງານດັ່ງກ່າວໂດຍກົງ, ເຊິ່ງທາງຝ່າຍຈີນ ຮັບຜິດ ຊອບໃນການບຳລຸງຮັກສາທາງດ້ານເຕັກນິກຂອງລະບົບໃຫ້ ສປປ ລາວ ລ້າ ເປັນໄລຍະເວລາ 3 ປີ.",
   },
+
   {
     id: "p3",
     side: "left",
+    icon: "fa-solid fa-arrows-rotate",
     date: "Phase 03 • ",
     title: "ຫັນປ່ຽນເປັນນິຕິບຸກຄົນ",
     desc: "ຜ່ານການຈັດຕັ້ງປະຕິບັດຕົວຈິງເຫັນວ່າການນຳໃຊ້ລະບົບດັ່ງກ່າວແມ່ນຍັງບໍ່ເຕັມປະສິດທິພາບເທົ່າທີ່ຄວນ ເນື່ອງຈາກການດຳເນີນງານແມ່ນບໍ່ສອດຄ່ອງກັບພາລະບົດບາດຂອງ ທຫລ ທີ່ເປັນຜູ້ຄຸ້ມຄອງມະຫາພາກດ້ານການເງິນ-ເງິນຕາ, ທັງເປັນອົງກອນທີ່ບໍ່ສະແຫວງຫາຜົນກຳໄລ ຈຶ່ງເຮັດໃຫ້ການຄຸຸ້ມຄອງບໍລິຫານລະບົບດັ່ງ ກ່າວ ຍັງມີລັກສະນະ ‘’ນະໂຍບາຍ’’. ດັ່ງນັ້ນ, ຄະນະພັກ, ຄະນະຜູ້ວ່າການ ທຫລ ຈຶ່ງມີມະຕິຕົກລົງເຫັນດີໃຫ້ຫັນເອົາວຽກງານ LAPS ເປັນນິຕິບຸກຄົນຕາມມະຕິກອງປະຊຸມຄະນະປະຈຳພັກ-ຄະນະຜູ້ວ່າການ ທຫລ ປະຈຳເດືອນ ກຸມພາ 2016.",
   },
+
   {
     id: "p4",
     side: "right",
-    
+    icon: "fa-screwdriver-wrench",
     date: "Phase 04 • ",
     title: "ການບຳລຸງຮັກສາລະບົບ",
-    desc: "ພາຍຫຼັງສິ້ນສຸດໄລຍະການບຳລຸງຮັກສາທາງດ້ານເຕັກນິກລ້າຈາກຝ່າຍຈີນໃນວັນທີ 01/12/2018, ສປປ ລາວ ຕ້ອງໄດ້ສືບຕໍ່ໃນການບໍາລຸງຮັກສາລະບົບເອງ. ໂດຍ ທຫລ ໄດ້ໂອນພາລະບົດບາດການດຳເນີນງານໃຫ້ບໍລິສັດ LAPNet ທີ່ຈະສ້າງຂຶ້ນ ເປັນຜູ້ສືບຕໍ່ດຳເນີນທຸລະກິດໃນການໃຫ້ບໍລິການລະບົບ LAPS ໃຫ້ມີປະສິດທິຜົນສູງສຸດ ແລະ ພັດທະນາໃຫ້ສາມາດເຊື່ອມໂຍງກັບພາກພື້ນ ແລະ ສາກົນ, ເພາະວ່າລະບົບຊຳລະທາງການເງິນແມ່ນຍິ່ງມີຄວາມສຳຄັນເປັນອັນດັບຕົ້ນໆຂອງຂະແໜງເສດຖະຖິດ-ການເງິນ ທີ່ຄວນໄດ້ຮັບການພັດທະນາໃຫ້ມີຄວາມ ເໝາະສົມ-ສອດຄ່ອງກັບຄວາມຕ້ອງການຂອງໜ່ວຍງານເສດຖະກິດ ທັງພາກລັດ ແລະ ເອກະຊົນ.",
+    desc: "ພາຍຫຼັງສິ້ນສຸດໄລຍະການບຳລຸງຮັກສາທາງດ້ານເຕັກນິກລ້າຈາກຝ່າຍຈີນໃນວັນທີ 01/12/2018, ສປປ ລາວ ຕ້ອງໄດ້ສືບຕໍ່ໃນການບໍາລຸງຮັກສາລະບົບເອງ. ໂດຍ ທຫລ ໄດ້ໂອນພາລະບົດບາດການດຳເນີນງານໃຫ້ບໍລິສັດ LAPNet ທີ່ຈະສ້າງຂຶ້ນ ເປັນຜູ້ສືບຕໍ່ດຳເນີນທຸລະກິດໃນການໃຫ້ບໍລິການລະບົບ LAPS ໃຫ້ມີປະສິດທິຜົນສູງສຸດ ແລະ ພັດທະນາໃຫ້ສາມາດເຊື່ອມໂຍງກັບພາກພື້ນ ແລະ ສາກົນ, ເພາະວ່າລະບົບຊຳລະທາງການເງິນແມ່ນຍິ່ງມີຄວາມສຳຄັນເປັນອັນດັບຕົ້ນໆຂອງຂະແໜງເສດຖະຖິດ-ການເງິນ ທີ່ຄວນໄດ້ຮັບການພັດທະນາໃຫ້ມີຄວາມ ເໝາະສົມ-ສອດຄ່ອງກັບຄວາມຕ້ອງການຂອງໜ່ວຍງານເສດຖກິດ ທັງພາກລັດ ແລະ ເອກະຊົນ.",
   },
+
   {
     id: "p5",
     side: "left",
+    icon: "fa-solid fa-flag",
     date: "Phase 05 • ",
     title: "ບົດບາດຂອງ LAPNet",
-    desc: "ບໍລິສັດລາວ ຈະເປັນສ່ວນໜຶ່ງໃນການປະກອບສ່ວນຊຸກຍູ້ເສດຖະກິດ ແລະ ໃຫ້ການສະໜັບສະໜູນບັນທະນາຄານທຸລະກິດໃຫ້ສາມາດເຊື່ອມໂຍງ  ກັນໃຫ້ໄດ້ຫລາຍຊ່ອງທາງຂຶ້ນກວ່າເກົ່າ ເພື່ອເປັນການອຳນວຍຄວາມສະດວກໃຫ້ແກ່ຜູ້ຊົມໃຊ້ໄດ້ສາມາດດຳເນີນທຸລະກຳທາງດ້ານການເງິນໄດ້ “ ທຸກທີ່, ທຸກເວລາ, ທຸກຊ່ອງທາງການຊຳລະ” .",
+    desc: "ບໍລິສັດລາວ ຈະເປັນສ່ວນໜຶ່ງໃນການປະກອບສ່ວນຊຸກຍູ້ເສດຖະກິດ ແລະ ໃຫ້ການສະໜັບສະໜູນບັນທະນາຄານທຸລະກິດໃຫ້ສາມາດເຊື່ອມໂຍງ  ກັນໃຫ້ໄດ້ຫລາຍຊ່ອງທາງຂຶ້ນກວ່າເກົ່າ ເພື່ອເປັນການອຳນວຍຄວາມສະດວກໃຫແກ່ຜູ້ຊົມໃຊ້ໄດ້ສາມາດດຳເນີນທຸລະກຳທາງດ້ານການເງິນໄດ້ “ ທຸກທີ່, ທຸກເວລາ, ທຸກຊ່ອງທາງການຊຳລະ” .",
   },
 ]);
 
@@ -113,7 +135,6 @@ function setEventRef(el, idx) {
 let triggers = [];
 
 onMounted(() => {
-  // LINE DRAW (scrub)
   if (lineFillRef.value && timelineRef.value) {
     gsap.set(lineFillRef.value, { scaleY: 0, transformOrigin: "top" });
 
@@ -123,14 +144,18 @@ onMounted(() => {
       end: "bottom 70%",
       scrub: true,
       onUpdate: (self) => {
-        gsap.to(lineFillRef.value, { scaleY: self.progress, ease: "none", overwrite: true, duration: 0 });
+        gsap.to(lineFillRef.value, {
+          scaleY: self.progress,
+          ease: "none",
+          overwrite: true,
+          duration: 0,
+        });
       },
     });
 
     triggers.push(st);
   }
 
-  // EVENTS
   eventRefs.value.forEach((eventEl) => {
     if (!eventEl) return;
 
@@ -139,7 +164,6 @@ onMounted(() => {
     const side = eventEl.dataset.side;
     const fromX = side === "left" ? -26 : 26;
 
-    // Initial states (CSS handles most, but this makes it rock-solid)
     if (node) gsap.set(node, { opacity: 0, scale: 0.6 });
     if (reveal) gsap.set(reveal, { opacity: 0, x: fromX, y: 14 });
 
@@ -179,7 +203,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  // Clean up ScrollTriggers (important in SPAs)
   triggers.forEach((t) => t && t.kill && t.kill());
   triggers = [];
 });
@@ -187,15 +210,14 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .page{
-  /* Theme tokens (scoped, inherited by children) */
   --bg0:#03081a;
   --bg1:#01030f;
   --text:#eaf1ff;
   --muted:rgba(234,241,255,.70);
   --line:rgba(127,168,255,.22);
-  --accent:#5eead4;   /* teal */
-  --accent2:#60a5fa;  /* blue */
-  --accent3:#a78bfa;  /* violet */
+  --accent:#0048ff;
+  --accent2:#60a5fa;
+  --accent3:#a78bfa;
   --card:rgba(255,255,255,.06);
   --stroke:rgba(255,255,255,.12);
   --shadow:0 20px 70px rgba(0,0,0,.62);
@@ -213,7 +235,6 @@ onBeforeUnmount(() => {
   overflow:hidden;
 }
 
-/* Soft sheen + subtle grid overlay */
 .page::before{
   content:"";
   position:absolute;
@@ -238,7 +259,6 @@ onBeforeUnmount(() => {
 .wrap{
   position:relative;
   z-index:1;
-
   max-width:1100px;
   margin:0 auto;
   padding:72px 22px 90px;
@@ -275,33 +295,12 @@ h1{
   font-size:14px;
 }
 
-.chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  color:rgba(234,240,255,.74);
-  font-size:12px;
-  user-select:none;
-  white-space:nowrap;
-}
-.dot{
-  width:8px;height:8px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent2),var(--accent3));
-  box-shadow:0 0 0 6px rgba(96,165,250,.14);
-}
-
 .timeline{
   position:relative;
   margin-top:26px;
   padding:26px 0;
 }
 
-/* GSAP-animated line */
 .line{
   position:absolute;
   left:50%;
@@ -346,11 +345,20 @@ h1{
   margin-bottom:8px;
 }
 
+/* ✅ Updated title to align icon + text */
 .title{
   font-weight:600;
   font-size:16px;
   line-height:1.2;
   margin:0 0 8px;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.title i{
+  font-size:14px;
+  opacity:.9;
 }
 
 .desc{
@@ -421,7 +429,6 @@ h1{
   z-index:-1;
 }
 
-/* Responsive: stack */
 @media (max-width: 820px){
   .hero{flex-direction:column;align-items:flex-start}
   .line{left:22px; transform:none;}

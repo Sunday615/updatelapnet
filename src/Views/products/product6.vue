@@ -2,8 +2,8 @@
 import navbar from '../../components/miannavbar/main_navbar.vue';
 
 
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue';
 
+import cardbenetfitpd6 from '../../Views/products/benetfit/cardbenetfitpd6.vue'
 
 import product6swiper from '../../Views/products/swipper/product6swiper.vue';
 import crossborderbtn from '../../components/button/crossborderbtn.vue';
@@ -28,7 +28,7 @@ onMounted(() => {
   });
 });
 
-const heroVideo = '/videos/productvdo-background.mp4';
+
 
 // ... memberLogos unchanged ...
 
@@ -95,18 +95,7 @@ watch(
      
    </div>
    <div class="benetfix">
-      <videobackgroundhomepage :src="heroVideo" poster="/images/tech-poster.jpg">
-         <div class="benetfitcontainer">
-            <div class="benetfitcontent">
-               <h1>ຜົນປະໂຫຍດທີ່ໄດ້ຮັບ</h1>
-               <p>ການເຊື່ອມໂຍງ ລະບົບການຊຳລະຂ້າມແດນໃນຮູບແບບ QR Code ລະຫວ່າງປະເທດ ຈະອຳນວຍຄວາມສະດວກໃຫ້ກັບລູກຄ້າຂອງ
-                  ທະນາຄານ ໃຫ້ສາມາດເຮັດທຸລະກຳຊຳລະຂ້າມແດນ ໄດ້ຢ່າງປອດໄພ ສະດວກສະບາຍ ວ່ອງໄວ ໂດຍສາມາດນຳໃຊ້ບັນຊີເງິນກີບໃນການ
-                  ຊຳລະ ແລະ ຮ້ານຄ້າໃນ ສ ປປ ລາວ ກໍ່ສາມາດຮັບການສະແກນຈາກນັກທ່ອງທ່ຽວຕ່າງປະເທດໄດ້ ໂດຍຈະອຳນວຍຄວາມສະດວກໃນການ
-                  ຮັບຊຳລະ ບໍ່ຫຍຸ້ງຍາກໃນການນຳໃຊ້ເງິນສົດ ແລະ ເງິນທອນຈາກຮ້ານຄ້າໃນເວລາຊຳລະເງິນ.</p>
-            </div>
-
-         </div>
-      </videobackgroundhomepage>
+      <cardbenetfitpd6/>
    </div>
    <div class="slidecontainer">
       <product6swiper />
@@ -246,7 +235,7 @@ watch(
 
 .benetfix {
    width: 100%;
-   height: 50vh;
+   height: auto;
 
 
 }

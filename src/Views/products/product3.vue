@@ -1,8 +1,7 @@
 <script setup>
 import navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
-import homepagebutton from '../../components/button/homepagebutton.vue';
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue'
+
+
 import tagproduct from '../../components/tagproduct/tagproduct.vue';
 import product3_footerlogomember from '../../components/footer/logomemberfooter/product3_footerlogomember.vue';
 import cardscrolling from './cardscrolling/cardscrolling2.vue';
@@ -10,6 +9,7 @@ import tablefee from '../../components/tablefee/tablefee.vue';
 import stepwork from './stepwork/stepwork.vue';
 import hero_sectionproduct3 from '../../Views/products/product_herosection/hero_sectionproduct3.vue'
 import secondfooter from '../../components/footer/mainfooter/secondfooter.vue';
+import cardbenetfitpd3 from '../../Views/products/benetfit/cardbenetfitpd3.vue'
 import { onMounted } from 'vue';
 onMounted(() => {
   window.scrollTo({
@@ -98,27 +98,7 @@ const memberLogos = [
       <hero_sectionproduct3/>
    </div>
    <div class="benetfix">
-      <videobackgroundhomepage :src="heroVideo" poster="/images/tech-poster.jpg">
-         <div class="benetfitcontainer">
-            <div class="benetfitcontent">
-               <h1>ຜົນປະໂຫຍດທີ່ໄດ້ຮັບ</h1>
-               <h2>ດ້ານທະນາຄານສະມາຊິກ</h2>
-               <p>ຫຼຸດຕົ້ນທຶນທາງດ້ານບຸກຂະລາກອນທີ່ໃຫ້ບໍລິການໂອນເງິນຂ້າມທະນາຄານຜ່ານ Counter ຫຼື ປ່ອງບໍລິການຂອງທະນາຄານ
-                    ໃຫ້ລູກຄ້າ
-                    ຫັນມານຳໃຊ້ຕູ້ ATM ໃນການເຮັດທຸລະກຳ ແລະ ຍັງສາມາດເພີ່ມຈຳນວນທຸລະກຳການໂອນ ເພາະສາມາດໂອນຢູ່ຕູ້ ATM
-                    ຂອງທະນາຄານ
-                    ໃດກໍ່ໄດ້ທີ່ເປັນສະມາຊິກຂອງບໍລິສັດ LAPNet.</p>
-            </div>
-            <div class="condition">
-               <h1>ເງື່ອນໄຂການໃຊ້ບໍລິການ</h1>
-               <h2>ດ້ານລູກຄ້າຂອງທະນາຄານ</h2>
-               <p>ເປັນການອຳນວຍຄວາມສະດວກ ແລະ ປະຢັດເວລາ ໂດຍລູກຄ້າບໍ່ຈໍາເປັນຕ້ອງລໍຖ້າການໃຊ້ບໍລິການໂອນເງິນຂ້າມທະນາຄານຜ່ານ
-                    counter ຫຼື ປ່ອງບໍລິການຂອງທະນາຄານ; ລູກຄ້າສາມາດເຮັດທຸລະກຳໂອນເງິນຂ້າມທະນາຄານໄດ້ດ້ວຍຕົນເອງ
-                    ດ້ວຍການໂອນເງິນ
-                    ທີ່ຕູ້ ATM ຂອງທະນາຄານສະມາຊິກ ຊຶ່ງປັດຈຸບັນມີ 14 ທະນາຄານທີ່ສາມາດໃຫ້ບໍລິການໄດ້.</p>
-            </div>
-         </div>
-      </videobackgroundhomepage>
+     <cardbenetfitpd3/>
    </div>
    <div class="cardscrolling">
 
@@ -268,7 +248,7 @@ const memberLogos = [
 
 .benetfix {
    width: 100%;
-   height: 100vh;
+   height: auto;
 
 }
 

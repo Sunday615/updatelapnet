@@ -2,11 +2,10 @@
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { gsap } from 'gsap';
 
-import main_navbar from '../../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue';
 import membercard from '../../../components/membercard/membercard.vue';
 import logofootermembercardatm from '../../../components/footer/logomemberfooter/logofootermembercardatm.vue';
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue';
+import main_navbar from '../../../components/miannavbar/main_navbar.vue';
 onMounted(() => {
   window.scrollTo({
     top: 0,

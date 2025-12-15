@@ -1,8 +1,6 @@
 <script setup>
 import navbar from '../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../components/footer/mainfooter/mainfooter.vue';
-import homepagebutton from '../../components/button/homepagebutton.vue';
-import videobackgroundhomepage from '../../components/videobackground/productbackgroundvideo.vue'
+
 import tagproduct from '../../components/tagproduct/tagproduct.vue';
 import product4_footerlogomember from '../../components/footer/logomemberfooter/product4_footerlogomember.vue';
 import product4tech from '../techbenetfit/product4tech.vue';

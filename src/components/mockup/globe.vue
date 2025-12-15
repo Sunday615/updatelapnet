@@ -67,8 +67,18 @@ const props = withDefaults(
     nodePinScale?: number;
     hubPinScale?: number;
 
-    // ✅ NEW: show star background in THREE scene or not
     showStars?: boolean;
+
+    /** ✅ NEW: เปิดมาให้ hub (LAPNET) อยู่ด้านหน้าก่อน */
+    startWithHubFront?: boolean;
+    /** ✅ NEW: เผื่ออยากกำหนด start lat/lon เอง (จะ override startWithHubFront) */
+    startLat?: number;
+    startLon?: number;
+
+    /** ✅ NEW: ดัน hubLogo ให้อยู่ด้านหน้า (กันโดนจุด/เส้นบัง) */
+    hubFrontLift?: number;
+    /** ✅ NEW: renderOrder ของ hubLogo ให้สูงกว่า element อื่น */
+    hubRenderOrder?: number;
   }>(),
   {
     pairs: () => [],
@@ -88,15 +98,15 @@ const props = withDefaults(
 
     landMaskUrl: "/textures/earth-mask.png",
 
-    dotPulseSpeed: 0.60,
+    dotPulseSpeed: 0.6,
 
     inboundSeconds: 3.8,
     outboundSeconds: 3.2,
     inboundBatchMin: 3,
     inboundBatchMax: 4,
     inboundStaggerSeconds: 0.18,
-    outboundDelaySeconds: 0.10,
-    outboundStaggerSeconds: 0.10,
+    outboundDelaySeconds: 0.1,
+    outboundStaggerSeconds: 0.1,
     batchPauseSeconds: 0.35,
 
     flowTrailCount: 7,
@@ -107,7 +117,14 @@ const props = withDefaults(
     nodePinScale: 0.14,
     hubPinScale: 0.29,
 
-    showStars: false, // ✅ default: no stars (clean overlay)
+    showStars: false,
+
+    startWithHubFront: true,
+    startLat: undefined,
+    startLon: undefined,
+
+    hubFrontLift: 0.14,
+    hubRenderOrder: 50,
   }
 );
 
@@ -172,11 +189,7 @@ function angleBetween(a: THREE.Vector3, b: THREE.Vector3) {
 function latLonToVec3(lat: number, lon: number, r: number) {
   const phi = (90 - lat) * (Math.PI / 180);
   const theta = (lon + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
-    -r * Math.sin(phi) * Math.cos(theta),
-     r * Math.cos(phi),
-     r * Math.sin(phi) * Math.sin(theta)
-  );
+  return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
 }
 
 function vec3ToUV(p: THREE.Vector3) {
@@ -413,7 +426,7 @@ function makeStarfield(count = 1200, radius = 18) {
   g.setAttribute("position", new THREE.BufferAttribute(p, 3));
   const m = new THREE.PointsMaterial({
     size: 0.02,
-    opacity: 0.60,
+    opacity: 0.6,
     transparent: true,
     depthWrite: false,
     blending: THREE.NormalBlending,
@@ -427,8 +440,17 @@ function makeStarfield(count = 1200, radius = 18) {
   return s;
 }
 
-function makeLogoPin(worldPos: THREE.Vector3, normal: THREE.Vector3, logoTex: THREE.Texture | undefined, size = 0.2) {
+/** ✅ เพิ่ม lift + renderOrder เพื่อให้ hub อยู่หน้า */
+function makeLogoPin(
+  worldPos: THREE.Vector3,
+  normal: THREE.Vector3,
+  logoTex: THREE.Texture | undefined,
+  size = 0.2,
+  lift = 0.07,
+  renderOrder = 0
+) {
   const group = new THREE.Group();
+
   if (logoTex) {
     const mat = new THREE.SpriteMaterial({
       map: logoTex,
@@ -441,17 +463,21 @@ function makeLogoPin(worldPos: THREE.Vector3, normal: THREE.Vector3, logoTex: TH
 
     const spr = new THREE.Sprite(mat);
     spr.scale.set(size, size, 1);
-    spr.position.copy(normal.clone().multiplyScalar(0.07));
-    group.add(spr);
+    spr.position.copy(normal.clone().multiplyScalar(lift));
 
+    // ✅ ให้ hub/logo สำคัญอยู่ชั้นหน้ากว่า (แก้ “โดนจุด/เส้นบัง”)
+    spr.renderOrder = renderOrder;
+
+    group.add(spr);
     disposers.push(() => mat.dispose());
   }
 
   group.position.copy(worldPos.clone().add(normal.clone().multiplyScalar(0.02)));
+  group.renderOrder = renderOrder;
   return group;
 }
 
-function makeHubMarker(worldPos: THREE.Vector3, normal: THREE.Vector3, circleTex: THREE.Texture) {
+function makeHubMarker(worldPos: THREE.Vector3, normal: THREE.Vector3, circleTex: THREE.Texture, renderOrder = 0) {
   const mat = new THREE.SpriteMaterial({
     map: circleTex,
     color: new THREE.Color("#ffffff"),
@@ -464,11 +490,13 @@ function makeHubMarker(worldPos: THREE.Vector3, normal: THREE.Vector3, circleTex
 
   const spr = new THREE.Sprite(mat);
   spr.scale.set(0.10, 0.10, 1);
-  spr.position.copy(normal.clone().multiplyScalar(0.06));
+  spr.position.copy(normal.clone().multiplyScalar(0.10));
+  spr.renderOrder = renderOrder;
 
   const group = new THREE.Group();
   group.add(spr);
   group.position.copy(worldPos.clone().add(normal.clone().multiplyScalar(0.02)));
+  group.renderOrder = renderOrder;
 
   disposers.push(() => mat.dispose());
   return group;
@@ -485,7 +513,7 @@ function makeHubRoute(hubPos: THREE.Vector3, nodePos: THREE.Vector3, circleTex: 
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const v = a.clone().applyAxisAngle(axis, angle * t).multiplyScalar(CFG.radius);
-    const lift = Math.sin(Math.PI * t) * 0.30;
+    const lift = Math.sin(Math.PI * t) * 0.3;
     v.add(v.clone().normalize().multiplyScalar(lift));
     pts.push(v);
   }
@@ -650,8 +678,6 @@ onMounted(async () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NoToneMapping;
-
-  // ✅ transparent clear
   renderer.setClearColor(0x000000, 0);
 
   scene = new THREE.Scene();
@@ -664,15 +690,23 @@ onMounted(async () => {
   key.position.set(3, 2, 3);
   scene.add(key);
 
-  // ✅ optional starfield background
   if (props.showStars) scene.add(makeStarfield());
 
   const globe = new THREE.Group();
   scene.add(globe);
 
-  const focusV = latLonToVec3(props.focusLat!, props.focusLon!, 1).normalize();
-  const q = new THREE.Quaternion().setFromUnitVectors(focusV, new THREE.Vector3(0, 0, 1));
-  globe.quaternion.copy(q);
+  /** ✅ START ORIENTATION: เปิดมาหัน hub (LAPNET) เข้ากล้องก่อน */
+  const startLat =
+    props.startLat ??
+    (props.startWithHubFront ? props.hubLat! : props.focusLat!);
+
+  const startLon =
+    props.startLon ??
+    (props.startWithHubFront ? props.hubLon! : props.focusLon!);
+
+  const startV = latLonToVec3(startLat, startLon, 1).normalize();
+  const qStart = new THREE.Quaternion().setFromUnitVectors(startV, new THREE.Vector3(0, 0, 1));
+  globe.quaternion.copy(qStart);
 
   const sampleLand = props.landMaskUrl ? await loadLandMaskSampler(props.landMaskUrl) : null;
 
@@ -717,10 +751,22 @@ onMounted(async () => {
   const routesGroup = new THREE.Group();
   globe.add(routesGroup);
 
-  // ✅ hub logo on globe (fallback to white dot)
+  // ✅ hub logo on globe (ยกขึ้น + renderOrder สูง)
   const hubTex = texMap.get(hub.value.logo);
-  if (hubTex) routesGroup.add(makeLogoPin(hubVec, hubN, hubTex, props.hubPinScale ?? 0.29));
-  else routesGroup.add(makeHubMarker(hubVec, hubN, circleTex));
+  if (hubTex) {
+    routesGroup.add(
+      makeLogoPin(
+        hubVec,
+        hubN,
+        hubTex,
+        props.hubPinScale ?? 0.29,
+        props.hubFrontLift ?? 0.14,
+        props.hubRenderOrder ?? 50
+      )
+    );
+  } else {
+    routesGroup.add(makeHubMarker(hubVec, hubN, circleTex, props.hubRenderOrder ?? 50));
+  }
 
   const minSepRad = (props.minSeparationDeg! * Math.PI) / 180;
   const minHubRad = (props.minNodeToHubDeg! * Math.PI) / 180;
@@ -743,7 +789,7 @@ onMounted(async () => {
     const nodeN = nodePos.clone().normalize();
     const color = i % 2 === 0 ? CFG.arcColor : "#9CA3AF";
 
-    routesGroup.add(makeLogoPin(nodePos, nodeN, texMap.get(node.logo), props.nodePinScale!));
+    routesGroup.add(makeLogoPin(nodePos, nodeN, texMap.get(node.logo), props.nodePinScale!, 0.07, 1));
 
     const route = makeHubRoute(hubVec, nodePos, circleTex, color);
     routesGroup.add(route.baseLine, route.outLine, route.inLine, route.outDots, route.inDots);
@@ -789,13 +835,13 @@ onMounted(async () => {
 
     const minB = clamp(props.inboundBatchMin ?? 3, 1, total);
     const maxB = clamp(props.inboundBatchMax ?? 4, minB, total);
-    const batchSize = total <= maxB ? total : (Math.random() < 0.55 ? minB : maxB);
+    const batchSize = total <= maxB ? total : Math.random() < 0.55 ? minB : maxB;
 
     const inDur = Math.max(1.6, props.inboundSeconds ?? 3.8);
     const outDur = Math.max(1.4, props.outboundSeconds ?? inDur * 0.85);
     const inSt = clamp(props.inboundStaggerSeconds ?? 0.18, 0.0, 0.6);
-    const outDelay = clamp(props.outboundDelaySeconds ?? 0.10, 0.0, 0.8);
-    const outSt = clamp(props.outboundStaggerSeconds ?? 0.10, 0.0, 0.6);
+    const outDelay = clamp(props.outboundDelaySeconds ?? 0.1, 0.0, 0.8);
+    const outSt = clamp(props.outboundStaggerSeconds ?? 0.1, 0.0, 0.6);
     const pause = clamp(props.batchPauseSeconds ?? 0.35, 0.0, 2.0);
 
     const sources: number[] = [];
@@ -971,17 +1017,16 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* ✅ IMPORTANT: wrapper โปร่งใส 100% ให้ parent คุมขนาดเอง */
-.globeWrap{
+.globeWrap {
   width: 100%;
   height: 100%;
   position: relative;
   background: transparent;
-  border-radius: inherit; /* ถ้า parent มี radius จะเข้ากัน */
-  overflow: hidden;       /* กันขอบแตก */
+  border-radius: inherit;
+  overflow: hidden;
 }
 
-.globeCanvas{
+.globeCanvas {
   width: 100%;
   height: 100%;
   display: block;

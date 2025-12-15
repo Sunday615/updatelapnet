@@ -6,6 +6,7 @@
       <div class="bgGrid"></div>
       <div class="bgNoise"></div>
     </div>
+
     <header ref="nav" class="nav">
       <div class="navInner">
         <div class="brand">
@@ -19,10 +20,10 @@
         <nav class="navLinks">
           <productDropdown />
           <memberdropdown />
-          <a href="/joinus" class="navLink">ຂ່າວສານ ແລະ ກິດຈະກຳ</a>
-          <a href="" class="navLink">ຮ່ວມງານກັບເຮົາ</a>
+          <a href="/bloggrid" class="navLink">ຂ່າວສານ ແລະ ກິດຈະກຳ</a>
+          <a href="/joinus" class="navLink">ຮ່ວມງານກັບເຮົາ</a>
           <aboutusdropdown />
-          <a href="" class="navLink">ຕິດຕໍ່ພວກເຮົາ</a>
+          <a href="/contactus" class="navLink">ຕິດຕໍ່ພວກເຮົາ</a>
         </nav>
 
         <!-- Right actions -->
@@ -43,7 +44,6 @@
 
           <button class="navCta">Login</button>
 
-          <!-- keep if you use it elsewhere; otherwise you can remove -->
           <sidebar class="sidebar-lapnet" ref="sidebarRef" />
 
           <!-- Mobile only -->
@@ -96,8 +96,15 @@
         <div ref="deviceGlow" class="deviceGlow" aria-hidden="true"></div>
 
         <div ref="globeEl" class="globeStage">
-          <LapnetGlobe v-if="globeReady" class="globe" />
-          <div v-else class="globePlaceholder" aria-hidden="true"></div>
+          <!-- ✅ no delay: render immediately, fallback shows while async chunk loads -->
+          <Suspense>
+            <template #default>
+              <LapnetGlobe class="globe" />
+            </template>
+            <template #fallback>
+              <div class="globePlaceholder" aria-hidden="true"></div>
+            </template>
+          </Suspense>
         </div>
       </div>
     </div>
@@ -154,6 +161,40 @@
       <secondfooter />
     </div>
   </template>
+
+  <!-- ✅ 3s Tech Glow Loader (GSAP) — NO LOGO -->
+  <Teleport to="body">
+    <div v-if="isLoading" ref="loaderEl" class="pageLoader" role="status" aria-label="Loading">
+      <div ref="loaderCardEl" class="loaderCard techCard">
+        <div class="techOrb" aria-hidden="true">
+          <div class="orbGlow"></div>
+         <div class="orbCore">
+  <img src="/logolapnet/fullcircle.png" alt="LAPNET" class="orbLogo" />
+</div>
+
+          <div class="orbRing ring1"></div>
+          <div class="orbRing ring2"></div>
+          <div class="orbRing ring3"></div>
+          <div class="orbScan"></div>
+        </div>
+
+        <div class="techMeta">
+          <div class="techLabel">Loading....</div>
+          <div class="techSub">Lao National Payment Network</div>
+
+          <div class="techBar" aria-hidden="true">
+            <span class="techBarFill"></span>
+          </div>
+
+          <div class="techDots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="techGridOverlay" aria-hidden="true"></div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -174,15 +215,22 @@ const homepage_sidebar = defineAsyncComponent(() =>
   import("../../components/sidebar/homepage_sidebar.vue")
 );
 const whychooseus = defineAsyncComponent(() => import("./whychooseus.vue"));
-const productherosectionhomepage = defineAsyncComponent(() => import("../../Views/Homepage/productherosectionhomepage.vue").catch(() => import("./productherosectionhomepage.vue"))); // fallback
+const productherosectionhomepage = defineAsyncComponent(() =>
+  import("../../Views/Homepage/productherosectionhomepage.vue").catch(() =>
+    import("./productherosectionhomepage.vue")
+  )
+); // fallback
 const bloghomepage = defineAsyncComponent(() => import("../../components/blog/hompage/bloghomepage.vue"));
 const secondfooter = defineAsyncComponent(() => import("../../components/footer/mainfooter/secondfooter.vue"));
-const LapnetGlobe = defineAsyncComponent(() => import("../../components/mockup/atmmockup.vue"));
+
+// ✅ Globe: preload immediately (no idle delay)
+const loadGlobe = () => import("../../components/mockup/atmmockup.vue");
+loadGlobe(); // start fetching chunk ASAP
+const LapnetGlobe = defineAsyncComponent(loadGlobe);
 
 const sidebarOpen = ref(false);
 const sidebarShouldMount = ref(false);
 const belowFold = ref(false);
-const globeReady = ref(false);
 
 const root = ref<HTMLElement | null>(null);
 const nav = ref<HTMLElement | null>(null);
@@ -197,7 +245,19 @@ const globeEl = ref<HTMLElement | null>(null);
 
 const sidebarRef = ref<HTMLElement | null>(null);
 
-let cleanup: (() => void) | null = null;
+// ✅ Loader refs/state
+const isLoading = ref(true);
+const loaderEl = ref<HTMLElement | null>(null);
+const loaderCardEl = ref<HTMLElement | null>(null);
+
+let heroCtx: gsap.Context | null = null;
+let heroTl: gsap.core.Timeline | null = null;
+
+let stageCleanup: (() => void) | null = null;
+let removeKeyListener: (() => void) | null = null;
+
+let loaderTweens: gsap.core.Tween[] = [];
+let loaderDone: gsap.core.Tween | null = null;
 
 const lockScroll = (on: boolean) => {
   document.documentElement.style.overflow = on ? "hidden" : "";
@@ -205,7 +265,7 @@ const lockScroll = (on: boolean) => {
 
 // ✅ mount sidebar only when opened + lock scroll
 watch(sidebarOpen, (v) => {
-  lockScroll(v);
+  lockScroll(v || isLoading.value);
   if (v) sidebarShouldMount.value = true;
 });
 
@@ -216,20 +276,14 @@ const runIdle = (cb: () => void, timeout = 1200) => {
   else setTimeout(cb, 250);
 };
 
-onMounted(() => {
-  // ✅ defer heavy mounts
-  runIdle(() => (globeReady.value = true), 900);
-  runIdle(() => (belowFold.value = true), 1400);
+const buildHeroIntro = () => {
+  heroCtx = gsap.context(() => {
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 
-  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-
-  const onKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") sidebarOpen.value = false;
-  };
-  window.addEventListener("keydown", onKey);
-
-  const ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: { ease: "power3.out" },
+    });
 
     tl.from(nav.value, { y: -16, opacity: 0, duration: 0.7 })
       .from(pill.value, { y: 18, opacity: 0, duration: 0.7 }, "-=0.35")
@@ -238,6 +292,8 @@ onMounted(() => {
       .from(actions.value, { y: 16, opacity: 0, duration: 0.7 }, "-=0.5")
       .from(globeEl.value, { y: 26, opacity: 0, scale: 0.985, duration: 1.0 }, "-=0.55")
       .from(deviceGlow.value, { opacity: 0, duration: 0.9 }, "-=0.8");
+
+    heroTl = tl;
 
     if (!reduce) {
       gsap.to(globeEl.value, {
@@ -263,32 +319,127 @@ onMounted(() => {
           qg(nx * 18);
         };
 
-        stage.addEventListener("mousemove", onMove);
-        stage.addEventListener("mouseleave", () => {
+        const onLeave = () => {
           qx(0);
           qy(0);
           qg(0);
-        });
+        };
 
-        cleanup = () => stage.removeEventListener("mousemove", onMove);
+        stage.addEventListener("mousemove", onMove);
+        stage.addEventListener("mouseleave", onLeave);
+
+        stageCleanup = () => {
+          stage.removeEventListener("mousemove", onMove);
+          stage.removeEventListener("mouseleave", onLeave);
+        };
       }
     }
   }, root);
 
-  cleanup = (() => {
-    const prev = cleanup;
-    return () => {
-      prev?.();
-      ctx.revert();
-      window.removeEventListener("keydown", onKey);
-      lockScroll(false);
-    };
-  })();
+  heroTl?.progress(0);
+};
+
+const startLoader = () => {
+  lockScroll(true);
+
+  const el = loaderEl.value;
+  if (!el) return;
+
+  const q = gsap.utils.selector(el);
+
+  gsap.set(el, { autoAlpha: 1 });
+
+  // entrance
+  loaderTweens.push(
+    gsap.fromTo(
+      loaderCardEl.value,
+      { y: 14, scale: 0.985, autoAlpha: 0 },
+      { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, ease: "power3.out" }
+    )
+  );
+
+  // rings rotate
+  loaderTweens.push(gsap.to(q(".ring1"), { rotation: 360, duration: 1.4, repeat: -1, ease: "none" }));
+  loaderTweens.push(gsap.to(q(".ring2"), { rotation: -360, duration: 2.2, repeat: -1, ease: "none" }));
+  loaderTweens.push(gsap.to(q(".ring3"), { rotation: 360, duration: 3.1, repeat: -1, ease: "none" }));
+
+  // core pulse + glow breathe
+  loaderTweens.push(gsap.to(q(".orbCore"), { scale: 1.08, duration: 0.85, repeat: -1, yoyo: true, ease: "sine.inOut" }));
+  loaderTweens.push(gsap.to(q(".orbGlow"), { opacity: 0.85, duration: 0.9, repeat: -1, yoyo: true, ease: "sine.inOut" }));
+
+  // scanline sweep
+  loaderTweens.push(
+    gsap.fromTo(
+      q(".orbScan"),
+      { yPercent: -140, opacity: 0.0 },
+      { yPercent: 140, opacity: 0.9, duration: 0.85, repeat: -1, ease: "sine.inOut" }
+    )
+  );
+
+  // bar sweep
+  loaderTweens.push(gsap.set(q(".techBarFill"), { xPercent: -120 }) as any);
+  loaderTweens.push(gsap.to(q(".techBarFill"), { xPercent: 220, duration: 1.0, repeat: -1, ease: "sine.inOut" }));
+
+  // dots
+  loaderTweens.push(
+    gsap.to(q(".techDots span"), {
+      opacity: 1,
+      scale: 1.25,
+      duration: 0.35,
+      stagger: 0.2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    })
+  );
+
+  // 3 seconds then fade out
+  loaderDone = gsap.delayedCall(1, () => {
+    loaderTweens.forEach((t) => t?.kill());
+    loaderTweens = [];
+
+    gsap.to(el, {
+      autoAlpha: 0,
+      duration: 0.35,
+      ease: "power2.out",
+      onComplete: () => {
+        isLoading.value = false;
+        lockScroll(sidebarOpen.value);
+        heroTl?.play(0);
+      },
+    });
+  });
+};
+
+onMounted(() => {
+  runIdle(() => (belowFold.value = true), 1400);
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") sidebarOpen.value = false;
+  };
+  window.addEventListener("keydown", onKey);
+  removeKeyListener = () => window.removeEventListener("keydown", onKey);
+
+  buildHeroIntro();
+  startLoader();
 });
 
 onBeforeUnmount(() => {
-  cleanup?.();
-  cleanup = null;
+  loaderDone?.kill();
+  loaderTweens.forEach((t) => t?.kill());
+  loaderTweens = [];
+
+  stageCleanup?.();
+  stageCleanup = null;
+
+  heroCtx?.revert();
+  heroCtx = null;
+  heroTl = null;
+
+  removeKeyListener?.();
+  removeKeyListener = null;
+
+  lockScroll(false);
 });
 </script>
 
@@ -513,7 +664,6 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: 26px;
- 
   align-items: center;
 }
 
@@ -723,5 +873,189 @@ onBeforeUnmount(() => {
   .navCta {
     display: none;
   }
+}
+
+/* ---------------- Loader (Tech Glow) ---------------- */
+.pageLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(980px 520px at 50% 18%, rgba(0, 200, 255, 0.16), transparent 62%),
+    radial-gradient(980px 620px at 42% 40%, rgba(0, 0, 191, 0.18), transparent 65%),
+    rgba(7, 5, 15, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.loaderCard {
+  position: relative;
+  width: min(520px, 90vw);
+  padding: 26px 24px 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 8, 18, 0.55);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.techCard {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.techGridOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(closest-side at 40% 45%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+.techOrb {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.orbGlow {
+  position: absolute;
+  inset: -32px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 200, 255, 0.22), transparent 62%);
+  filter: blur(14px);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.orbCore {
+  position: absolute;
+  inset: 22px;
+  border-radius: 999px;
+  z-index: 2;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  will-change: transform;
+}
+.orbCore::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(0, 200, 255, 0.35), rgba(0, 0, 191, 0.14) 55%, rgba(0, 0, 0, 0) 80%),
+    radial-gradient(circle at 60% 70%, rgba(124, 58, 237, 0.16), rgba(0, 0, 0, 0) 70%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.orbLogo {
+  position: relative;
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  border-radius: 999px;
+  filter: drop-shadow(0 18px 60px rgba(0, 200, 255, 0.18));
+  transform-origin: center;
+  will-change: transform;
+}
+
+.orbRing {
+  position: absolute;
+  inset: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 200, 255, 0.28);
+  box-shadow: 0 0 28px rgba(0, 200, 255, 0.20);
+  z-index: 1;
+  will-change: transform;
+}
+
+.ring2 {
+  inset: 18px;
+  border-color: rgba(124, 58, 237, 0.24);
+  box-shadow: 0 0 26px rgba(124, 58, 237, 0.18);
+}
+
+.ring3 {
+  inset: 30px;
+  border-color: rgba(0, 0, 191, 0.22);
+  box-shadow: 0 0 24px rgba(0, 0, 191, 0.16);
+}
+
+.orbScan {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.55), transparent);
+  filter: blur(0.2px);
+  opacity: 0;
+  z-index: 3;
+  will-change: transform, opacity;
+}
+
+.techMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.techLabel {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.techSub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.techBar {
+  margin-top: 8px;
+  width: min(280px, 100%);
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  overflow: hidden;
+}
+
+.techBarFill {
+  display: block;
+  height: 100%;
+  width: 45%;
+  border-radius: inherit;
+  background: linear-gradient(271deg, rgba(0, 0, 191, 1) 35%, rgba(0, 200, 255, 1) 100%);
+  will-change: transform;
+}
+
+.techDots {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.techDots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(0, 200, 255, 0.85);
+  opacity: 0.25;
+  transform: scale(1);
 }
 </style>

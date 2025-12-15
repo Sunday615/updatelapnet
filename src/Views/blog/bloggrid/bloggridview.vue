@@ -1,7 +1,6 @@
 <script setup>
-
 import main_navbar from '../../../components/miannavbar/main_navbar.vue';
-import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue';
+
 import bloggridsection from './bloggridsection.vue';
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue';
 </script>

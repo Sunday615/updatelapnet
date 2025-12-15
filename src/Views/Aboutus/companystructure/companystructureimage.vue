@@ -55,8 +55,7 @@
 </template>
 
 <script setup>
-import main_navbar from '../../../components/miannavbar/main_navbarstructure.vue';
-import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue';
+import main_navbar from '../../../components/miannavbar/main_navbar.vue';
 import cpn_navbar from './navbarcompany/cpn_navbar.vue';
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue';
 import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue';
