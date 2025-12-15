@@ -24,7 +24,7 @@ type ProductPair = {
   color?: string;
 };
 
-const DEFAULT_NODES: Endpoint[] = Array.from({ length: 20 }).map((_, i) => ({
+const DEFAULT_NODES: Endpoint[] = Array.from({ length: 21 }).map((_, i) => ({
   name: `Logo ${i + 1}`,
   logo: `/logos/logo-${String(i + 1).padStart(2, "0")}.png`,
 }));

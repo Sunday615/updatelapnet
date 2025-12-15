@@ -294,7 +294,7 @@ onBeforeUnmount(() => {
 .timeline-item.left .timeline-card {
   margin-right: calc(50% + 3rem);
   margin-left: auto;
-  text-align: right;
+  text-align: left;
 }
 
 .timeline-item.right .timeline-card {
@@ -322,6 +322,7 @@ onBeforeUnmount(() => {
   line-height: 1.55;
   color: #475569;
   white-space: pre-line;
+  
 }
 
 /* Node */

@@ -44,7 +44,7 @@
          <div class="vm-image-container">
           <div class="vm-image-frame">
             <img
-              src="/aboutus/vision/1.png"
+              src="/aboutus/vision/mission.PNG"
               alt="Modern workspace with data visualization on screen"
               class="vm-image"
             />

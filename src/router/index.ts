@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomePage from '../Views/Homepage/homepage.vue'
+
 import product1 from '../Views/products/product1.vue'
 import product2 from '../Views/products/product2.vue'
 import product3 from '../Views/products/product3.vue'
@@ -44,14 +44,10 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomePage,
-  },
-  
-  {
-    path: '/newhome',
-    name: 'newhome',
     component: mainhomepage,
   },
+  
+
   {
     path: '/mockup',
     name: 'atmmockup',

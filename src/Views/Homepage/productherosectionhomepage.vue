@@ -138,11 +138,11 @@ const props = withDefaults(
     companyName: "LAPNET",
     companyTagline: "Lao National Payment Network",
 
-    kicker: "Unified Network",
-    title: "AI Payment",
-    titleAccent: "Hub",
+  
+    title: "ຜະລິດຕະພັນ ແລະ ການບໍລິການ ທັງໝົດຂອງ ",
+    titleAccent: "LAPNet",
     description:
-      "Connect products and services through a modern, secure network. Visual routing style with technology glow signals.",
+      "ບໍລິສັດ ລາວເນ ເຊີນນໍ ເພເມັ້ນ ເນັດເວີກ ຈຳກັດ (LAPNet) ເຊິ່ງບໍລິສັດ LAPNet ເປັນຜູ້ໃຫ້ບໍລິການລະບົບ ການຊໍາລະທຸລະກໍາຍ່ອຍ ຕາມທີ່ໄດ້ກໍານົດໄວ້ໃນກົດໝາຍວ່າດ້ວຍລະບົບ ການຊໍາລະ.",
   }
 );
 
@@ -160,42 +160,42 @@ const description = props.description;
 // ✅ example products (edit as you want)
 const leftProducts = ref<Product[]>([
   {
-    title: "ATM Inquiry",
-    desc: "Cross-bank balance inquiry through ATM network.",
-    tag: "Product",
+    title: "ກວດຍອດເງິນຂ້າມທະນາຄານຜ່ານຕູ້",
+    desc: "ການກວດຍອດເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM ແມ່ນນຳໃຊ້ລະບົບ ແລັບໃນການເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກ ຂອງບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
+    tag: "ATM",
     to: "/products_service/atm-inquiry",
   },
   {
-    title: "ATM Cash Withdraw",
-    desc: "Withdraw cash across banks with real-time routing.",
-    tag: "Service",
+    title: "ຖອນເງິນສົດ ຂ້າມ ທະນາຄານຜ່ານຕູ້ ATM",
+    desc: "ການຖອນເງິນສົດຜ່ານຕູ້ເອທີເອັມ ແມ່ນນຳໃຊ້ລະບົບແລັບໃນການ ເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງ ບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
+    tag: "ATM",
     to: "/products_service/atm-cash-withdraw",
   },
   {
-    title: "ATM Transfer",
-    desc: "Transfer funds across banks via ATM channels.",
-    tag: "Product",
+    title: "ໂອນເງິນ ຂ້າມທະນາຄານຜ່ານຕູ້ ATM",
+    desc: "ການໂອນເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM ແມ່ນນຳໃຊ້ລະບົບແລັບ ໃນການເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງ ບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
+    tag: "ATM",
     to: "/products_service/atm-transfer",
   },
 ]);
 
 const rightProducts = ref<Product[]>([
   {
-    title: "Mobile Transfer",
-    desc: "Transfer funds across banks through mobile apps.",
-    tag: "Service",
+    title: "ໂອນເງິນ ຂ້າມທະນາຄານເທິງມືຖື",
+    desc: "ການໂອນເງິນຂ້າມທະນາຄານເທິງມືຖື (Fund Transfer via Mobile Application) ໂດຍນຳໃຊ້ລະບົບ LMPS ໃນການເຊື່ອມໂຍງຜ່ານ Applications ຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
+    tag: "Mobile Banking",
     to: "/products_service/mobile-transfer",
   },
   {
-    title: "QR Payment",
-    desc: "Cross-bank payment via QR with smooth experience.",
-    tag: "Product",
+    title: "ການຊໍາລະເງິນຂ້າມທະນາຄານຜ່ານ LAPNet",
+    desc: "ການຊໍາລະຂ້າມທະນາຄານຜ່ານ LAPNet LAOQR ໂດຍນຳໃຊ້ລະບົບ LMPS ໃນການເຊື່ອມໂຍງຜ່ານ Applications ຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງບໍລິສັດ LAPNet.",
+    tag: "Mobile Banking",
     to: "/products_service/qr-payment",
   },
   {
-    title: "Cross-border QR",
-    desc: "International QR payment connections across networks.",
-    tag: "Global",
+    title: "ຊຳລະຂ້າມແດນໃນຮູບແບບQR CODE ລະຫວ່າງປະເທດ",
+    desc: "ບໍລິສັດ LAPNet ໄດ້ຕໍ່ຍອດການພັດທະນາລະບົບຊຳລະຂ້າມທະນາຄານເທິງມືຖື (LMPS) ເພື່ອຂະຫຍາຍຜະລິດຕະພັນ ຊຳລະຂ້າມທະນາຄານ ໃຫ້ສາມາດຮອງຮັບການ ຊຳລະ ຄ່າສິນຄ້າ - ບໍລິການ ລະຫວ່າງປະເທດ.",
+    tag: "Mobile Banking",
     to: "/products_service/crossborder",
   },
 ]);
@@ -443,10 +443,10 @@ onBeforeUnmount(() => {
   letter-spacing: -0.02em;
 }
 .titleAccent{
-  background: linear-gradient(271deg, rgba(0, 200, 255, 1) 0%, rgba(124, 58, 237, 1) 55%, rgba(0, 110, 255, 1) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+   background: linear-gradient(120deg, #0033ab 0%, #0078ff 40%, #00c6ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   text-shadow: 0 22px 90px rgba(0,200,255,0.14);
   margin-left: 10px;
 }
@@ -465,7 +465,7 @@ onBeforeUnmount(() => {
 .stage{
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 1380px;
   margin: 22px auto 0;
   min-height: 420px;
   padding: 26px 18px;
@@ -522,7 +522,7 @@ onBeforeUnmount(() => {
 .colRight{ align-items: flex-start; }
 
 .card{
-  width: min(360px, 100%);
+  width: min(560px, 100%);
   text-align: left;
   border-radius: 18px;
   padding: 14px 14px 14px;
@@ -609,8 +609,8 @@ onBeforeUnmount(() => {
 }
 
 .orbLogo{
-  width: 58px;
-  height: 58px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   filter: drop-shadow(0 8px 26px rgba(255,255,255,0.18));
 }
@@ -680,6 +680,6 @@ onBeforeUnmount(() => {
 @media (max-width: 520px){
   .hubHero{ padding: 44px 14px 70px; }
   .orb{ width: 104px; height: 104px; }
-  .orbLogo{ width: 52px; height: 52px; }
+  .orbLogo{ width: 120px; height: 120px; }
 }
 </style>

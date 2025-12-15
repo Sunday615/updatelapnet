@@ -138,31 +138,48 @@
 
         <!-- Glass chip stack -->
         <div ref="chipStack" class="chip-stack">
+          <router-link to="/products_service/atm-inquiry">
           <div class="chip-row">
             <span class="chip-dot"></span>
             <span class="chip-label">ກວດຍອດເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM</span>
             <span class="chip-value">01</span>
           </div>
+          </router-link>
+          <router-link to="/products_service/atm-cash-withdraw">
           <div class="chip-row">
             <span class="chip-dot"></span>
             <span class="chip-label">ຖອນເງິນສົດຂ້າມທະນາຄານຜ່ານຕູ້ ATM</span>
             <span class="chip-value">02</span>
           </div>
+          </router-link>
+          <router-link to="/products_service/atm-transfer">
           <div class="chip-row">
             <span class="chip-dot"></span>
-            <span class="chip-label">ໂອນເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM ໃນຮູບ ແບບການໂອນ ບັດ ຫາ ເລກໜ້າບັດ</span>
+            <span class="chip-label">ໂອນເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM</span>
             <span class="chip-value">03</span>
           </div>
+          </router-link>
+          <router-link to="/products_service/mobile-transfer">
           <div class="chip-row">
             <span class="chip-dot"></span>
-            <span class="chip-label">ໂອນເງິນຂ້າມທະນາຄານເທິງມືຖື ໃນຮູບແບບໂອນຈາກບັນຊີ-ບັນຊີ</span>
+            <span class="chip-label">ໂອນເງິນຂ້າມທະນາຄານເທິງມືຖື</span>
             <span class="chip-value">04</span>
           </div>
+          </router-link>
+          <router-link to="/products_service/qr-payment">
           <div class="chip-row">
             <span class="chip-dot"></span>
-            <span class="chip-label">ຊໍາລະຂ້າມທະນາຄານ ຜ່ານ LAPNet QR pay</span>
+            <span class="chip-label">ການຊໍາລະເງິນຂ້າມທະນາຄານຜ່ານ LAPNet</span>
             <span class="chip-value">05</span>
           </div>
+          </router-link>
+          <router-link to="/products_service/crossborder">
+          <div class="chip-row">
+            <span class="chip-dot"></span>
+            <span class="chip-label">ຊຳລະຂ້າມແດນໃນຮູບແບບ QR CODE ລະຫວ່າງປະເທດ</span>
+            <span class="chip-value">06</span>
+          </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -416,7 +433,7 @@ onMounted(() => {
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #0b1120;
+  color: #ffffff;
   background: linear-gradient(to right, #22d3ee, #6366f1);
   box-shadow: 0 16px 40px rgba(37, 99, 235, 0.6);
 }

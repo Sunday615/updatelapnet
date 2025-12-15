@@ -10,7 +10,9 @@
                 <p class="hero-subtitle">
                    ການຊໍາລະຂ້າມທະນາຄານຜ່ານ LAPNet LAOQR ໂດຍນຳໃຊ້ລະບົບ LMPS ໃນການເຊື່ອມໂຍງຜ່ານ Applications ຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງບໍລິສັດ LAPNet ໃຫ້ສາມາດນຳໃຊ້ຟັງຊັ່ນການດຳເນີນທຸລະກຳຊໍາລະຜ່ານ QR ຂອງທະນາຄານອື່ນໄດ້
                 </p>
-                
+                  <router-link to="/products_service/allproduct">
+                        <tagproduct label="ຜະລິດຕະພັນ ແລະ ການບໍລິການ" />
+                </router-link>
             </div>
 
             <!-- RIGHT: SINGLE 3D MOCKUP FOLLOW MOUSE -->

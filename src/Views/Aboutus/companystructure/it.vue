@@ -16,7 +16,7 @@
       <!-- TOP HEADER BAR -->
       <header class="org-header">
         <div class="org-header-left">
-          <!-- เปลี่ยนชื่อหัวข้อเป็น IT -->
+     
           <h1 class="org-title-lao">ພະແນກໄອທີ IT</h1>
         </div>
         <div class="org-header-right">
@@ -71,6 +71,7 @@ import { gsap } from 'gsap'
 import main_navbar from '../../../components/miannavbar/main_navbar.vue'
 import mainfooter from '../../../components/footer/mainfooter/mainfooter.vue'
 import cpn_navbar from './navbarcompany/cpn_navbar.vue'
+
 import secondfooter from '../../../components/footer/mainfooter/secondfooter.vue'
 const root = ref(null)
 
@@ -118,7 +119,7 @@ const rows = [
       id: 6,
       name: 'ທ່ານ ວັນຊະນະ ວັນນະລົງ',
       role: 'ຄຸ້ມຄອງລະບົບເຄືອຂ່າຍ ແລະ ຄວາມປອດໄພ',
-      photo: '/aboutus/company/avarta.png'
+      photo: '/aboutus/company/lapnet_employee_image/IT/6.webp'
     },
     {
       id: 7,

@@ -19,7 +19,9 @@
                     ບໍລິການ ຈາກນັກທ່ອງທ່ຽວຕ່າງປະເທດທີ່ເຂົ້າມາ ສ ປປ ລາວ, ປັດຈຸບັນ LAPNet ໄດ້ຮ່ວມໂຄງການກັບ 4 ປະເທດຄື:
                     ປະເທດກຳປູເຈຍ, ປະເທດໄທ, ປະເທດຈີນ ແລະ ປະເທດຫວຽດນາມ.
                 </p>
-                
+                  <router-link to="/products_service/allproduct">
+                        <tagproduct label="ຜະລິດຕະພັນ ແລະ ການບໍລິການ" />
+                </router-link>
             </div>
 
             <!-- RIGHT: SINGLE 3D MOCKUP FOLLOW MOUSE -->

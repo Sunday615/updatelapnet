@@ -85,11 +85,10 @@
 
 }
 .titlemember span{
-  background: linear-gradient(271deg, rgba(0, 200, 255, 1) 35%, rgba(0, 0, 191, 1) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 18px 60px rgba(0,200,255,0.14);
+   background: linear-gradient(120deg, #0033ab 0%, #0078ff 40%, #00c6ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 .titlemember {
   margin-top: 55px;

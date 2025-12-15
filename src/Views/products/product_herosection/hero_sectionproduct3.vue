@@ -14,7 +14,9 @@
                     ບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ ໃຫ້ສາມາດໃຊ້ຟັງຊັ່ນການໂອນເງິນ
                     ຂ້າມທະນາຄານໄດ້.
                 </p>
-             
+               <router-link to="/products_service/allproduct">
+                        <tagproduct label="ຜະລິດຕະພັນ ແລະ ການບໍລິການ" />
+                </router-link>
             </div>
 
             <!-- RIGHT: SINGLE 3D MOCKUP FOLLOW MOUSE -->

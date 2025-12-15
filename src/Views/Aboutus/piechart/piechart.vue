@@ -378,8 +378,8 @@ onMounted(() => {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  /* ⬇️ more gap between chart & box */
-  gap: 56px;              /* was 32px */
+
+  gap: 56px;              
   align-items: stretch;
   justify-content: center;
   padding: 32px;

@@ -9,7 +9,13 @@
     background-image="/overlaynav/product/navigatorcontent-bg.png"
   />
 
+ 
+
   <section ref="heroEl" class="hero">
+    <div class="titleallproduct" style="width: 80% ; height:13vh ;" >
+      <span><p style=" font-size: clamp(34px, 4vw, 54px); text-align: center; padding-top: 30px; color:#fff; font-weight: bold;">ຜະລິດຕະພັນ ແລະ ການບໍລິການ ທັງຫມົດຂອງ LAPNet</p></span>
+    </div>
+    <div class="boxmargin" style="width: 100%; height:10vh"></div>
     <div class="hero__inner">
       <!-- Left -->
       <div class="left">
@@ -75,8 +81,9 @@
         </button>
       </div>
     </div>
+    <div class="boxmargin" style="width: 100%; height:7vh"></div>
   </section>
-
+  
   <secondfooter />
 </template>
 
@@ -97,62 +104,62 @@ const isAnimating = ref(false);
 const items = [
   {
     id: 1,
-    title: "UX Research",
-    desc: "Understanding users deeply to design meaningful digital experiences",
+    title: "ກວດຍອດເງິນ ຂ້າມທະນາຄານຜ່ານຕູ້ ATM",
+    desc: "ການກວດຍອດເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM ແມ່ນນຳໃຊ້ລະບົບ ແລັບໃນການເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກ ຂອງບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
     duration: "ລະບົບບັດທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1400&q=80",
+    img: "/product/allpd/product1.jpg",
     g1: "#0047ff",
     g2: "#120a2b",
     link: "/products_service/atm-inquiry", // ✅ link for click 1
   },
   {
     id: 2,
-    title: "Persona & Journey",
-    desc: "Mapping needs, motivations, and friction points for clarity",
+    title: "ຖອນເງິນສົດ ຂ້າມ ທະນາຄານຜ່ານຕູ້ ATM",
+    desc: "ການຖອນເງິນສົດຜ່ານຕູ້ເອທີເອັມ ແມ່ນນຳໃຊ້ລະບົບແລັບໃນການ ເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງ ບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
     duration: "ລະບົບບັດທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1556155092-8707de31f9c4?auto=format&fit=crop&w=1400&q=80",
-    g1: "#b455ff",
-    g2: "#0a0618",
+    img: "/product/allpd/product2.jpg",
+   g1: "#0047ff",
+    g2: "#120a2b",
     link: "/products_service/atm-cash-withdraw", // ✅ link for click 2
   },
   {
     id: 3,
-    title: "Wireframing",
-    desc: "Transforming ideas into structured visual blueprints for design",
+    title: "ໂອນເງິນ ຂ້າມທະນາຄານຜ່ານຕູ້ ATM",
+    desc: "ການໂອນເງິນຂ້າມທະນາຄານຜ່ານຕູ້ ATM ແມ່ນນຳໃຊ້ລະບົບແລັບ ໃນການເຊື່ອມໂຍງຕູ້ເອທີເອັມຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງ ບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ.",
     duration: "ລະບົບບັດທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
-    g1: "#df0000",
-    g2: "#0a0618",
+    img: "/product/allpd/product3.jpg",
+    g1: "#0047ff",
+    g2: "#120a2b",
     link: "/products_service/atm-transfer",
   },
   {
     id: 4,
-    title: "Visual Design",
-    desc: "Crafting engaging interfaces with clarity, color and style",
+    title: "ໂອນເງິນ ຂ້າມທະນາຄານ\nເທິງມືຖື",
+    desc: "ການໂອນເງິນຂ້າມທະນາຄານເທິງມືຖື (Fund Transfer via Mobile Application) ໂດຍນຳໃຊ້ລະບົບ LMPS ໃນການເຊື່ອມໂຍງຜ່ານ Applications ຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງບໍລິສັດລາວ ເນເຊີນນໍເພເມັ້ນ ເນັດເວີກ",
     duration: "ລະບົບຊຳລະຂ້າມທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80",
-    g1: "#df5000",
-    g2: "#120626",
+        img: "/product/allpd/product4.jpg",
+    g1: "#0047ff",
+    g2: "#120a2b",
     link: "/products_service/mobile-transfer",
   },
   {
     id: 5,
-    title: "Prototype",
-    desc: "Bringing flows to life with interactions and micro-animations",
+    title: "ການຊໍາລະເງິນຂ້າມທະນາຄານຜ່ານ LAPNet",
+    desc: "ການຊໍາລະຂ້າມທະນາຄານຜ່ານ LAPNet LAOQR ໂດຍນຳໃຊ້ລະບົບ LMPS ໃນການເຊື່ອມໂຍງຜ່ານ Applications ຂອງແຕ່ລະທະນາຄານທີ່ເປັນສະມາຊິກຂອງບໍລິສັດ LAPNet.",
     duration: "ລະບົບຊຳລະຂ້າມທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1400&q=80",
-    g1: "#4df7ff",
-    g2: "#070a1a",
+    img: "/product/allpd/product5.jpg",
+    g1: "#0047ff",
+    g2: "#120a2b",
     link: "/products_service/qr-payment",
   },
   {
     id: 6,
-    title: "Case Study",
-    desc: "A detailed exploration of design challenges and solutions",
+    title: "ຊຳລະຂ້າມແດນໃນຮູບແບບQR CODE ລະຫວ່າງປະເທດ",
+    desc: "ບໍລິສັດ LAPNet ໄດ້ຕໍ່ຍອດການພັດທະນາລະບົບຊຳລະຂ້າມທະນາຄານເທິງມືຖື (LMPS) ເພື່ອຂະຫຍາຍຜະລິດຕະພັນ ຊຳລະຂ້າມທະນາຄານ ໃຫ້ສາມາດຮອງຮັບການ ຊຳລະ ຄ່າສິນຄ້າ - ບໍລິການ ລະຫວ່າງປະເທດ.",
     duration: "ລະບົບຊຳລະຂ້າມທະນາຄານຮ່ວມກັນ",
-    img: "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&w=1400&q=80",
-    g1: "#dfd000",
-    g2: "#0b0620",
+     img: "/product/allpd/product6.jpg",
+   g1: "#0047ff",
+    g2: "#120a2b",
     link: "/products_service/crossborder",
   },
 ];
@@ -273,6 +280,7 @@ onMounted(() => {
 
 <style scoped>
 /* ===== Background / Layout ===== */
+
 .hero {
   --g1: #7b5cff;
   --g2: #070614;
@@ -310,9 +318,9 @@ onMounted(() => {
   padding: clamp(18px, 3vw, 28px);
   border-radius: 28px;
 
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(0, 0, 0, 0.08);
 
   backdrop-filter: blur(14px);
 }
