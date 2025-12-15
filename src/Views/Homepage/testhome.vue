@@ -513,6 +513,7 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: 26px;
+ 
   align-items: center;
 }
 
@@ -579,7 +580,7 @@ onBeforeUnmount(() => {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.92);
   color: rgba(8, 6, 14, 1);
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s ease;
