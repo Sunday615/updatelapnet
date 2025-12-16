@@ -153,7 +153,7 @@ const layout = [
       name: "ທ່ານ ນັນທະລາດ ແກ້ວປະເສີດ",
       role: "ຮອງປະທານສະພາ",
       roleTag: "vp",
-      image: "/logoallmember/circle_scale/BCEL.png"
+      image: "/board-director-profile/allbcel.png"
     },
     null,
     null
@@ -173,14 +173,14 @@ const layout = [
       name: "ທ່ານ ວຽງຄຳ ວັນສີລາລົມ",
       role: "ຄະນະສະພາບໍລິຫານ",
       roleTag: "member",
-      image: "/logoallmember/circle_scale/LDB.PNG"
+      image: "/board-director-profile/ldb.webp"
     },
     {
       type: "member",
       name: "ທ່ານ ສີສະອາດ ນຶມອາສາ",
       role: "ຄະນະສະພາບໍລິຫານ",
       roleTag: "member",
-      image: "/logoallmember/circle_scale/APBB.PNG"
+      image: "/board-director-profile/apbcircle.png"
     },
     null
   ],
@@ -192,14 +192,14 @@ const layout = [
       name: "ທ່ານ ວຽງວິໄລ ແສງຄຳຢອງ",
       role: "ຄະນະສະພາບໍລິຫານ",
       roleTag: "member",
-      image: "/logoallmember/circle_scale/lvb.PNG"
+      image: "/board-director-profile/lvb.png"
     },
     {
       type: "member",
       name: "ທ່ານ ຈັນຊະນະ ສິງຫາວົງ",
       role: "ຄະນະສະພາບໍລິຫານ",
       roleTag: "member",
-      image: "/logoallmember/circle_scale/JDB.png"
+      image: "/board-director-profile/alljdb.png"
     },
     {
       type: "member",

@@ -55,7 +55,7 @@
           <div class="person-card member-card">
             <div class="avatar-wrapper">
               <div class="avatar">
-                <img src="/logoallmember/circle_scale/lvb.PNG" alt="" />
+                <img src="/board-director-profile/lvb.png" alt="" />
               </div>
             </div>
             <div class="person-info">

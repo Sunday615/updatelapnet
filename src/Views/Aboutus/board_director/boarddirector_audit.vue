@@ -53,7 +53,7 @@
           <div class="person-card member-card">
             <div class="avatar-wrapper">
               <div class="avatar">
-                <img src="/logoallmember/circle_scale/LDB.PNG" alt="" />
+                <img src="/board-director-profile/ldb.webp" alt="" />
               </div>
             </div>
             <div class="person-info">

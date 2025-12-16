@@ -37,7 +37,7 @@
           <div class="person-card member-card">
             <div class="avatar-wrapper">
               <div class="avatar">
-                  <img src="/board-director-profile/jdbcircle.png" alt="" />
+                  <img src="/board-director-profile/alljdb.png" alt="" />
               </div>
             </div>
             <div class="person-info">
@@ -55,7 +55,7 @@
           <div class="person-card member-card">
             <div class="avatar-wrapper">
               <div class="avatar">
-                <img src="/logoallmember/circle_scale/BCEL.png" alt="" />
+                <img src="/board-director-profile/allbcel.png" alt="" />
               </div>
             </div>
             <div class="person-info">
